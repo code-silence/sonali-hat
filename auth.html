@@ -10,7 +10,9 @@
 </head>
 
 <body>
+  <!-- Authentication page wrapper: sidebar info + form panels -->
   <div class="auth-container">
+    <!-- Left branding panel with market message -->
     <div class="auth-sidebar">
       <div class="sidebar-content">
         <h2>সোনালী হাট</h2>
@@ -24,7 +26,9 @@
       </div>
     </div>
 
+    <!-- Right panel for login, signup, and password reset forms -->
     <div class="auth-form-section">
+      <!-- Login form box -->
       <div id="loginForm" class="form-box active-form">
         <div class="form-header">
           <h3>স্বাগতম! আবার ফিরে আসার জন্য ধন্যবাদ</h3>
@@ -55,6 +59,7 @@
         </div>
       </div>
 
+      <!-- Signup form box -->
       <div id="signupForm" class="form-box hidden-form">
         <div class="form-header">
           <h3>নতুন অ্যাকাউন্ট তৈরি করুন</h3>
@@ -102,6 +107,7 @@
         </div>
       </div>
 
+      <!-- Forgot password form box -->
       <div id="forgotForm" class="form-box hidden-form">
         <div class="form-header">
           <h3>পাসওয়ার্ড রিসেট করুন</h3>
@@ -125,6 +131,7 @@
     </div>
   </div>
   <script type="module">
+    // Firebase configuration and initialization for auth actions.
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
     import {
       getAuth,

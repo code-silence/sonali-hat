@@ -1,4 +1,7 @@
-// ফর্ম সুইচ করার ফাংশন
+// Auth page helper functions and event handlers.
+// This file controls form switching, password visibility, and Firebase auth actions.
+
+// Switch between login, signup, and forgot-password forms.
 function switchForm(formId) {
   const forms = document.querySelectorAll(".form-box");
   forms.forEach((form) => {
@@ -11,7 +14,7 @@ function switchForm(formId) {
   activeForm.classList.add("active-form");
 }
 
-// পাসওয়ার্ড দেখা এবং লুকানোর ফাংশন
+// Toggle the password input visibility and swap the eye icon state.
 function togglePassword(icon) {
   const inputField = icon.previousElementSibling;
   if (inputField.type === "password") {
@@ -25,6 +28,7 @@ function togglePassword(icon) {
   }
 }
 
+// Cache DOM elements for the login/signup/reset forms.
 const loginForm = document.getElementById("loginFormElement");
 const signupForm = document.getElementById("signupFormElement");
 const forgotForm = document.getElementById("forgotFormElement");
@@ -36,10 +40,12 @@ const signupEmail = document.getElementById("signupEmail");
 const signupPassword = document.getElementById("signupPassword");
 const resetEmail = document.getElementById("resetEmail");
 
+// Display a message to the user using the browser alert.
 function showMessage(message) {
   alert(message);
 }
 
+// Handle login form submission with Firebase authentication.
 function handleLogin(event) {
   event.preventDefault();
 
@@ -68,6 +74,7 @@ function handleLogin(event) {
     });
 }
 
+// Handle signup form submission and create a new Firebase user.
 function handleSignup(event) {
   event.preventDefault();
 
@@ -99,6 +106,7 @@ function handleSignup(event) {
     });
 }
 
+// Handle forgot-password form submission and send a reset email.
 function handleReset(event) {
   event.preventDefault();
 
@@ -126,6 +134,7 @@ function handleReset(event) {
     });
 }
 
+// Register form submit listeners only when the corresponding form exists.
 if (loginForm) {
   loginForm.addEventListener("submit", handleLogin);
 }
