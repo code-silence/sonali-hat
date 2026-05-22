@@ -1,214 +1,346 @@
 <!doctype html>
 <html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>সোনালী হাট - ড্যাশবোর্ড</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>সোনালী হাট - ড্যাশবোর্ড</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-
-<body>
-  <!-- Dashboard page container with sidebar navigation and main content -->
-  <div class="dashboard-container">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <h2><i class="fa-solid fa-wheat-awn"></i> সোনালী হাট</h2>
-        <i class="fa-solid fa-xmark close-btn" onclick="toggleSidebar()"></i>
-      </div>
-
-      <!-- Sidebar navigation links for dashboard actions -->
-      <ul class="sidebar-menu" id="sidebarMenu">
-        <li class="active">
-          <a href="#"><i class="fa-solid fa-house"></i> এক নজরে </a>
-        </li>
-        <li>
-          <a href="#"><i class="fa-solid fa-clipboard-list"></i> আমার অর্ডারসমূহ</a>
-        </li>
-
-        <!-- Seller-specific options shown only in seller mode -->
-        <li class="seller-item">
-          <a href="#"><i class="fa-solid fa-circle-plus"></i> নতুন পণ্য যোগ করুন</a>
-        </li>
-        <li class="seller-item">
-          <a href="#"><i class="fa-solid fa-boxes-stacked"></i> আমার পণ্যসমূহ</a>
-        </li>
-
-        <!-- Buyer-specific options shown only in buyer mode -->
-        <li class="buyer-item hidden-view">
-          <a href="#"><i class="fa-solid fa-heart"></i> পছন্দের পণ্য</a>
-        </li>
-        <li class="buyer-item hidden-view">
-          <a href="#"><i class="fa-solid fa-users"></i> আমার প্রিয় কৃষক</a>
-        </li>
-
-        <li>
-          <a href="#"><i class="fa-solid fa-wallet"></i> পেমেন্ট হিস্ট্রি</a>
-        </li>
-        <li>
-          <a href="#"><i class="fa-solid fa-user-gear"></i> প্রোফাইল সেটিংস</a>
-        </li>
-      </ul>
-
-      <div class="sidebar-footer">
-        <a href="auth.html" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> লগআউট</a>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <header class="topbar">
-        <div class="menu-toggle" onclick="toggleSidebar()">
-          <i class="fa-solid fa-bars"></i>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h2><i class="fa-solid fa-wheat-awn"></i> সোনালী হাট</h2>
+          <i class="fa-solid fa-xmark close-btn" onclick="toggleSidebar()"></i>
         </div>
 
-        <div class="topbar-right">
-          <button class="mode-switch-btn" onclick="toggleDashboardMode()">
-            <i class="fa-solid fa-right-left"></i>
-            <span id="modeText">Switch to Buying</span>
+        <ul class="sidebar-menu" id="sidebarMenu">
+          <li class="active">
+            <a href="#" onclick="switchDashboardView('sellerDashboard')"
+              ><i class="fa-solid fa-house"></i> এক নজরে
+            </a>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa-solid fa-clipboard-list"></i> আমার অর্ডারসমূহ</a
+            >
+          </li>
+
+          <li class="seller-item">
+            <a href="#" onclick="switchDashboardView('addProductView')"
+              ><i class="fa-solid fa-circle-plus"></i> নতুন পণ্য যোগ করুন</a
+            >
+          </li>
+          <li class="seller-item">
+            <a href="#" onclick="switchDashboardView('myProductsView')"
+              ><i class="fa-solid fa-boxes-stacked"></i> আমার পণ্যসমূহ</a
+            >
+          </li>
+
+          <li class="buyer-item hidden-view">
+            <a href="#"><i class="fa-solid fa-heart"></i> পছন্দের পণ্য</a>
+          </li>
+          <li class="buyer-item hidden-view">
+            <a href="#"><i class="fa-solid fa-users"></i> আমার প্রিয় কৃষক</a>
+          </li>
+
+          <li>
+            <a href="#"><i class="fa-solid fa-wallet"></i> পেমেন্ট হিস্ট্রি</a>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa-solid fa-user-gear"></i> প্রোফাইল সেটিংস</a
+            >
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <a href="auth.html" class="logout-btn"
+            ><i class="fa-solid fa-arrow-right-from-bracket"></i> লগআউট</a
+          >
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="topbar-right">
+            <button class="mode-switch-btn" onclick="toggleDashboardMode()">
+              <i class="fa-solid fa-right-left"></i>
+              <span id="modeText">Switch to Buying</span>
+            </button>
+
+            <div class="user-profile">
+              <span class="user-role-badge" id="roleBadge">কৃষক (Seller)</span>
+              <img
+                src="https://ui-avatars.com/api/?name=User&background=2d6a4f&color=fff"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+            </div>
+          </div>
+        </header>
+
+        <div class="content-wrapper">
+          <h3 class="welcome-text">স্বাগতম, আপনার ড্যাশবোর্ডে!</h3>
+
+          <div id="sellerDashboard" class="dashboard-view active-view">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="stat-info">
+                  <h4>মোট অর্ডার</h4>
+                  <p>১২ টি</p>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fa-solid fa-box-open"></i>
+                </div>
+                <div class="stat-info">
+                  <h4>মোট পণ্য (স্টকে)</h4>
+                  <p>৫ টি</p>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-info">
+                  <h4>মোট আয়</h4>
+                  <p>৳ ৪৫০০</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="recent-orders">
+              <div class="section-header">
+                <h4>সাম্প্রতিক সেল (Sales)</h4>
+                <button class="btn-view-all">সব দেখুন</button>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>অর্ডার আইডি</th>
+                      <th>তারিখ</th>
+                      <th>পণ্যের নাম</th>
+                      <th>মূল্য</th>
+                      <th>স্ট্যাটাস</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>#SH-1001</td>
+                      <td>২১ মে, ২০২৬</td>
+                      <td>দেশি পেঁয়াজ (৫ কেজি)</td>
+                      <td>৳ ৪০০</td>
+                      <td><span class="status pending">পেন্ডিং</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="buyerDashboard" class="dashboard-view hidden-view">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background-color: #e3f2fd; color: #1976d2"
+                >
+                  <i class="fa-solid fa-cart-arrow-down"></i>
+                </div>
+                <div class="stat-info">
+                  <h4>মোট কেনাকাটা</h4>
+                  <p>৮ টি</p>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background-color: #fff3e0; color: #f57c00"
+                >
+                  <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <div class="stat-info">
+                  <h4>অপেক্ষমাণ ডেলিভারি</h4>
+                  <p>২ টি</p>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background-color: #e8f5e9; color: #2e7d32"
+                >
+                  <i class="fa-solid fa-bangladeshi-taka-sign"></i>
+                </div>
+                <div class="stat-info">
+                  <h4>মোট খরচ</h4>
+                  <p>৳ ৩২০০</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="recent-orders">
+              <div class="section-header">
+                <h4>সাম্প্রতিক কেনাকাটা (Purchases)</h4>
+                <button class="btn-view-all">সব দেখুন</button>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>অর্ডার আইডি</th>
+                      <th>তারিখ</th>
+                      <th>পণ্যের নাম</th>
+                      <th>বিক্রেতা</th>
+                      <th>মূল্য</th>
+                      <th>স্ট্যাটাস</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>#SH-2055</td>
+                      <td>২১ মে, ২০২৬</td>
+                      <td>রাজশাহী স্পেশাল আম</td>
+                      <td>রহিম মিয়া</td>
+                      <td>৳ ১২০০</td>
+                      <td><span class="status pending">অপেক্ষমাণ</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="addProductView" class="dashboard-view hidden-view">
+            <h3 class="welcome-text" style="margin-bottom: 20px">
+              নতুন পণ্য যোগ করুন
+            </h3>
+            <form id="addProductForm" class="add-product-form">
+              <div class="input-grid">
+                <input
+                  type="text"
+                  id="pName"
+                  placeholder="পণ্যের নাম (যেমন: লাল আলু)"
+                  required
+                />
+                <input
+                  type="text"
+                  id="pWeight"
+                  placeholder="ওজন/প্যাকেজ (যেমন: ৫ কেজি)"
+                  required
+                />
+                <input
+                  type="number"
+                  id="pPrice"
+                  placeholder="মূল্য (৳)"
+                  required
+                />
+                <input
+                  type="text"
+                  id="pLocation"
+                  placeholder="লোকেশন (যেমন: শিবগঞ্জ, বগুড়া)"
+                  required
+                />
+                <input
+                  type="text"
+                  id="pSeller"
+                  placeholder="কৃষকের নাম"
+                  required
+                />
+                <div style="display: flex; flex-direction: column; gap: 5px">
+                  <label
+                    for="pImage"
+                    style="font-size: 0.9rem; color: #6c757d; font-weight: 500"
+                    >পণ্যের ছবি নির্বাচন করুন:</label
+                  >
+                  <input
+                    type="file"
+                    id="pImage"
+                    accept="image/*"
+                    required
+                    style="padding: 9px 15px"
+                  />
+                </div>
+              </div>
+              <div style="text-align: center; margin-top: 30px">
+                <button
+                  type="submit"
+                  class="btn-submit"
+                  style="
+                    width: auto;
+                    padding: 12px 40px;
+                    background: #2d6a4f;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 1rem;
+                    transition: 0.3s;
+                    box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
+                  "
+                >
+                  পণ্য সেভ করুন <i class="fa-solid fa-check"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div id="myProductsView" class="dashboard-view hidden-view">
+            <h3 class="welcome-text" style="margin-bottom: 20px">
+              আমার পণ্যসমূহ
+            </h3>
+            <div
+              class="product-grid"
+              id="myProductList"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 25px;
+              "
+            ></div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div id="dynamicToast" class="toast-notification">
+      <i id="toastIcon" class="fa-solid fa-circle-check toast-icon"></i>
+      <div class="toast-message">
+        <h4 id="toastTitle">সফল হয়েছে!</h4>
+        <p id="toastText">আপনার পণ্যটি তালিকায় যোগ করা হয়েছে।</p>
+      </div>
+    </div>
+
+    <div id="deleteModal" class="custom-modal hidden-modal">
+      <div class="modal-content">
+        <div class="modal-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>এই পণ্যটি মুছে ফেলা হবে এবং এটি আর ফেরত পাওয়া যাবে না।</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeDeleteModal()">বাতিল</button>
+          <button class="btn-confirm-delete" id="confirmDeleteBtn">
+            হ্যাঁ, মুছে ফেলুন
           </button>
-
-          <div class="user-profile">
-            <span class="user-role-badge" id="roleBadge">কৃষক (Seller)</span>
-            <img src="https://ui-avatars.com/api/?name=User&background=2d6a4f&color=fff" alt="Profile" class="avatar"
-              id="userAvatar" />
-          </div>
-        </div>
-      </header>
-
-      <div class="content-wrapper">
-        <h3 class="welcome-text">স্বাগতম, আপনার ড্যাশবোর্ডে!</h3>
-
-        <!-- Seller dashboard view: default visible panel -->
-        <div id="sellerDashboard" class="dashboard-view active-view">
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon">
-                <i class="fa-solid fa-cart-shopping"></i>
-              </div>
-              <div class="stat-info">
-                <h4>মোট অর্ডার</h4>
-                <p>১২ টি</p>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">
-                <i class="fa-solid fa-box-open"></i>
-              </div>
-              <div class="stat-info">
-                <h4>মোট পণ্য (স্টকে)</h4>
-                <p>৫ টি</p>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">
-                <i class="fa-solid fa-money-bill-wave"></i>
-              </div>
-              <div class="stat-info">
-                <h4>মোট আয়</h4>
-                <p>৳ ৪৫০০</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="recent-orders">
-            <div class="section-header">
-              <h4>সাম্প্রতিক সেল (Sales)</h4>
-              <button class="btn-view-all">সব দেখুন</button>
-            </div>
-            <div class="table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th>অর্ডার আইডি</th>
-                    <th>তারিখ</th>
-                    <th>পণ্যের নাম</th>
-                    <th>মূল্য</th>
-                    <th>স্ট্যাটাস</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>#SH-1001</td>
-                    <td>২১ মে, ২০২৬</td>
-                    <td>দেশি পেঁয়াজ (৫ কেজি)</td>
-                    <td>৳ ৪০০</td>
-                    <td><span class="status pending">পেন্ডিং</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Buyer dashboard view: toggled from seller mode -->
-        <div id="buyerDashboard" class="dashboard-view hidden-view">
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon" style="background-color: #e3f2fd; color: #1976d2">
-                <i class="fa-solid fa-cart-arrow-down"></i>
-              </div>
-              <div class="stat-info">
-                <h4>মোট কেনাকাটা</h4>
-                <p>৮ টি</p>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background-color: #fff3e0; color: #f57c00">
-                <i class="fa-solid fa-truck-fast"></i>
-              </div>
-              <div class="stat-info">
-                <h4>অপেক্ষমাণ ডেলিভারি</h4>
-                <p>২ টি</p>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background-color: #e8f5e9; color: #2e7d32">
-                <i class="fa-solid fa-bangladeshi-taka-sign"></i>
-              </div>
-              <div class="stat-info">
-                <h4>মোট খরচ</h4>
-                <p>৳ ৩২০০</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="recent-orders">
-            <div class="section-header">
-              <h4>সাম্প্রতিক কেনাকাটা (Purchases)</h4>
-              <button class="btn-view-all">সব দেখুন</button>
-            </div>
-            <div class="table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th>অর্ডার আইডি</th>
-                    <th>তারিখ</th>
-                    <th>পণ্যের নাম</th>
-                    <th>বিক্রেতা</th>
-                    <th>মূল্য</th>
-                    <th>স্ট্যাটাস</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>#SH-2055</td>
-                    <td>২১ মে, ২০২৬</td>
-                    <td>রাজশাহী স্পেশাল আম</td>
-                    <td>রহিম মিয়া</td>
-                    <td>৳ ১২০০</td>
-                    <td><span class="status pending">অপেক্ষমাণ</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </div>
-    </main>
-  </div>
-
-  <script src="js/dashboard.js"></script>
-</body>
-
+    </div>
+    <script src="js/dashboard.js"></script>
+  </body>
 </html>
