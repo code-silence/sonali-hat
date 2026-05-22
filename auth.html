@@ -1,146 +1,164 @@
 <!doctype html>
 <html lang="bn">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>সোনালী হাট - লগইন ও রেজিস্ট্রেশন</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="css/auth.css" />
-  </head>
-  <body>
-    <div class="auth-container">
-      <div class="auth-sidebar">
-        <div class="sidebar-content">
-          <h2>সোনালী হাট</h2>
-          <p>
-            কৃষক ও ক্রেতার সরাসরি মেলবন্ধন। ন্যায্য মূল্য নিশ্চিত করুন এবং ফ্রেশ
-            পণ্য কিনুন সরাসরি মাঠ থেকে।
-          </p>
-          <div class="field-icon">
-            <i class="fa-solid fa-wheat-awn"></i>
-          </div>
-        </div>
-      </div>
 
-      <div class="auth-form-section">
-        <div id="loginForm" class="form-box active-form">
-          <div class="form-header">
-            <h3>স্বাগতম! আবার ফিরে আসার জন্য ধন্যবাদ</h3>
-            <p>আপনার অ্যাকাউন্টে লগইন করুন</p>
-          </div>
-          <form>
-            <div class="input-group">
-              <i class="fa-solid fa-envelope input-icon"></i>
-              <input type="email" placeholder="ইমেইল অ্যাড্রেস" required />
-            </div>
-            <div class="input-group">
-              <i class="fa-solid fa-lock input-icon"></i>
-              <input type="password" placeholder="পাসওয়ার্ড" required />
-              <i
-                class="fa-solid fa-eye toggle-password"
-                onclick="togglePassword(this)"
-              ></i>
-            </div>
-            <div class="forgot-pass-link">
-              <a href="#" onclick="switchForm('forgotForm')"
-                >পাসওয়ার্ড ভুলে গেছেন?</a
-              >
-            </div>
-            <button type="submit" class="btn-submit">
-              লগইন করুন <i class="fa-solid fa-right-to-bracket"></i>
-            </button>
-          </form>
-          <div class="form-footer">
-            <p>
-              অ্যাকাউন্ট নেই?
-              <a href="#" onclick="switchForm('signupForm')"
-                >নতুন অ্যাকাউন্ট তৈরি করুন</a
-              >
-            </p>
-          </div>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>সোনালী হাট - লগইন ও রেজিস্ট্রেশন</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
 
-        <div id="signupForm" class="form-box hidden-form">
-          <div class="form-header">
-            <h3>নতুন অ্যাকাউন্ট তৈরি করুন</h3>
-            <p>সোনালী হাটে আপনাকে স্বাগতম</p>
-          </div>
-          <form>
-            <div class="role-selection">
-              <label class="role-card">
-                <input type="radio" name="userRole" value="buyer" checked />
-                <div class="role-content">
-                  <i class="fa-solid fa-basket-shopping"></i>
-                  <span>আমি ক্রেতা</span>
-                </div>
-              </label>
-              <label class="role-card">
-                <input type="radio" name="userRole" value="seller" />
-                <div class="role-content">
-                  <i class="fa-solid fa-tractor"></i>
-                  <span>আমি কৃষক</span>
-                </div>
-              </label>
-            </div>
-            <div class="input-group">
-              <i class="fa-solid fa-user input-icon"></i>
-              <input type="text" placeholder="আপনার সম্পূর্ণ নাম" required />
-            </div>
-            <div class="input-group">
-              <i class="fa-solid fa-envelope input-icon"></i>
-              <input type="email" placeholder="ইমেইল অ্যাড্রেস" required />
-            </div>
-            <div class="input-group">
-              <i class="fa-solid fa-lock input-icon"></i>
-              <input type="password" placeholder="পাসওয়ার্ড" required />
-              <i
-                class="fa-solid fa-eye toggle-password"
-                onclick="togglePassword(this)"
-              ></i>
-            </div>
-            <button type="submit" class="btn-submit">
-              রেজিস্ট্রেশন করুন <i class="fa-solid fa-user-plus"></i>
-            </button>
-          </form>
-          <div class="form-footer">
-            <p>
-              অলরেডি অ্যাকাউন্ট আছে?
-              <a href="#" onclick="switchForm('loginForm')">লগইন করুন</a>
-            </p>
-          </div>
-        </div>
-
-        <div id="forgotForm" class="form-box hidden-form">
-          <div class="form-header">
-            <h3>পাসওয়ার্ড রিসেট করুন</h3>
-            <p>আপনার ইমেইল দিন, আমরা রিসেট লিংক পাঠিয়ে দেব</p>
-          </div>
-          <form>
-            <div class="input-group">
-              <i class="fa-solid fa-envelope input-icon"></i>
-              <input
-                type="email"
-                placeholder="আপনার ইমেইল অ্যাড্রেস"
-                required
-              />
-            </div>
-            <button type="submit" class="btn-submit">
-              রিসেট লিংক পাঠান <i class="fa-solid fa-paper-plane"></i>
-            </button>
-          </form>
-          <div class="form-footer">
-            <p>
-              <a href="#" onclick="switchForm('loginForm')"
-                ><i class="fa-solid fa-arrow-left"></i> লগইন পেজে ফিরে যান</a
-              >
-            </p>
-          </div>
+<body>
+  <!-- Authentication page wrapper: sidebar info + form panels -->
+  <div class="auth-container">
+    <!-- Left branding panel with market message -->
+    <div class="auth-sidebar">
+      <div class="sidebar-content">
+        <h2>সোনালী হাট</h2>
+        <p>
+          কৃষক ও ক্রেতার সরাসরি মেলবন্ধন। ন্যায্য মূল্য নিশ্চিত করুন এবং ফ্রেশ
+          পণ্য কিনুন সরাসরি মাঠ থেকে।
+        </p>
+        <div class="field-icon">
+          <i class="fa-solid fa-wheat-awn"></i>
         </div>
       </div>
     </div>
-    <script src="js/auth.js"></script>
-  </body>
+
+    <!-- Right panel for login, signup, and password reset forms -->
+    <div class="auth-form-section">
+      <!-- Login form box -->
+      <div id="loginForm" class="form-box active-form">
+        <div class="form-header">
+          <h3>স্বাগতম! আবার ফিরে আসার জন্য ধন্যবাদ</h3>
+          <p>আপনার অ্যাকাউন্টে লগইন করুন</p>
+        </div>
+        <form id="loginFormElement">
+          <div class="input-group">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input id="loginEmail" type="email" placeholder="ইমেইল অ্যাড্রেস" required />
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input id="loginPassword" type="password" placeholder="পাসওয়ার্ড" required />
+            <i class="fa-solid fa-eye toggle-password" onclick="togglePassword(this)"></i>
+          </div>
+          <div class="forgot-pass-link">
+            <a href="#" onclick="switchForm('forgotForm')">পাসওয়ার্ড ভুলে গেছেন?</a>
+          </div>
+          <button type="submit" class="btn-submit">
+            লগইন করুন <i class="fa-solid fa-right-to-bracket"></i>
+          </button>
+        </form>
+        <div class="form-footer">
+          <p>
+            অ্যাকাউন্ট নেই?
+            <a href="#" onclick="switchForm('signupForm')">নতুন অ্যাকাউন্ট তৈরি করুন</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Signup form box -->
+      <div id="signupForm" class="form-box hidden-form">
+        <div class="form-header">
+          <h3>নতুন অ্যাকাউন্ট তৈরি করুন</h3>
+          <p>সোনালী হাটে আপনাকে স্বাগতম</p>
+        </div>
+        <form id="signupFormElement">
+          <div class="role-selection">
+            <label class="role-card">
+              <input type="radio" name="userRole" value="buyer" checked />
+              <div class="role-content">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <span>আমি ক্রেতা</span>
+              </div>
+            </label>
+            <label class="role-card">
+              <input type="radio" name="userRole" value="seller" />
+              <div class="role-content">
+                <i class="fa-solid fa-tractor"></i>
+                <span>আমি কৃষক</span>
+              </div>
+            </label>
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input id="signupName" type="text" placeholder="আপনার সম্পূর্ণ নাম" required />
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input id="signupEmail" type="email" placeholder="ইমেইল অ্যাড্রেস" required />
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input id="signupPassword" type="password" placeholder="পাসওয়ার্ড" required />
+            <i class="fa-solid fa-eye toggle-password" onclick="togglePassword(this)"></i>
+          </div>
+          <button type="submit" class="btn-submit">
+            রেজিস্ট্রেশন করুন <i class="fa-solid fa-user-plus"></i>
+          </button>
+        </form>
+        <div class="form-footer">
+          <p>
+            অলরেডি অ্যাকাউন্ট আছে?
+            <a href="#" onclick="switchForm('loginForm')">লগইন করুন</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Forgot password form box -->
+      <div id="forgotForm" class="form-box hidden-form">
+        <div class="form-header">
+          <h3>পাসওয়ার্ড রিসেট করুন</h3>
+          <p>আপনার ইমেইল দিন, আমরা রিসেট লিংক পাঠিয়ে দেব</p>
+        </div>
+        <form id="forgotFormElement">
+          <div class="input-group">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input id="resetEmail" type="email" placeholder="আপনার ইমেইল অ্যাড্রেস" required />
+          </div>
+          <button type="submit" class="btn-submit">
+            রিসেট লিংক পাঠান <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+        <div class="form-footer">
+          <p>
+            <a href="#" onclick="switchForm('loginForm')"><i class="fa-solid fa-arrow-left"></i> লগইন পেজে ফিরে যান</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    // Firebase configuration and initialization for auth actions.
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+    } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDduU3_gEc-a2lAdzNARc-McOHmwQSRxYY",
+      authDomain: "sonali-hat.firebaseapp.com",
+      projectId: "sonali-hat",
+      storageBucket: "sonali-hat.firebasestorage.app",
+      messagingSenderId: "173273844485",
+      appId: "1:173273844485:web:95d1f2f48e839b4e1fc56c",
+      measurementId: "G-G1S5MYBT1S",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.firebaseAuth = auth;
+    window.firebaseSignInWithEmailAndPassword = signInWithEmailAndPassword;
+    window.firebaseCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
+    window.firebaseSendPasswordResetEmail = sendPasswordResetEmail;
+  </script>
+  <script src="js/auth.js"></script>
+</body>
+
 </html>
