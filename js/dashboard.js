@@ -100,6 +100,7 @@ document
 
     const name = document.getElementById("pName").value;
     const weight = document.getElementById("pWeight").value;
+    const category = document.getElementById("pCategory").value;
     const price = document.getElementById("pPrice").value;
     const location = document.getElementById("pLocation").value;
     const seller = document.getElementById("pSeller").value;
@@ -114,14 +115,14 @@ document
             <div class="product-card">
                 <img src="${imageUrl}" alt="${name}" style="width: 100%; height: 200px; object-fit: cover;">
                 <div class="product-details">
-                    <span class="category-tag">প্যাকেজ: ${weight}</span>
+                    <span class="category-tag">${category}</span>
                     <h3>${name}</h3>
                     <p class="seller-info"><i class="fa-solid fa-location-dot"></i> ${location} | <i class="fa-solid fa-user"></i> ${seller}</p>
-                    
+                    <p class="package-info">প্যাকেজ: ${weight}</p>
                     <div class="price-action" style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
                         <span class="price">৳ ${price}</span>
                         <div class="action-buttons" style="display: flex; gap: 8px;">
-                            <button onclick="editProduct(this, '${name}', '${weight}', '${price}', '${location}', '${seller}')" style="background:#e8f5e9; color:#2d6a4f; border:none; width: 35px; height: 35px; border-radius:5px; cursor:pointer; transition:0.3s;" title="Edit">
+                            <button onclick="editProduct(this, '${name}', '${weight}', '${category}', '${price}', '${location}', '${seller}')" style="background:#e8f5e9; color:#2d6a4f; border:none; width: 35px; height: 35px; border-radius:5px; cursor:pointer; transition:0.3s;" title="Edit">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
                             <button onclick="deleteProduct(this)" style="background:#ffebee; color:#d32f2f; border:none; width: 35px; height: 35px; border-radius:5px; cursor:pointer; transition:0.3s;" title="Delete">
@@ -150,10 +151,11 @@ document
   });
 
 // --- Edit Product Function (পুরোপুরি অ্যালার্ট মুক্ত) ---
-function editProduct(buttonElement, name, weight, price, location, seller) {
+function editProduct(buttonElement, name, weight, category, price, location, seller) {
   // ফর্মের ফিল্ডগুলোতে আগের ডেটা বসিয়ে দেওয়া
   document.getElementById("pName").value = name;
   document.getElementById("pWeight").value = weight;
+  document.getElementById("pCategory").value = category;
   document.getElementById("pPrice").value = price;
   document.getElementById("pLocation").value = location;
   document.getElementById("pSeller").value = seller;
