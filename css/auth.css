@@ -1,3 +1,6 @@
+/* =========================================
+   1. গ্লোবাল ফন্ট ও রিসেট (সারা ওয়েবসাইটের জন্য)
+========================================= */
 @import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap");
 
 * {
@@ -16,6 +19,9 @@ body {
   padding: 20px;
 }
 
+/* =========================================
+   2. মূল অথেনটিকেশন কন্টেইনার (সাদা বক্স)
+========================================= */
 .auth-container {
   background-color: #ffffff;
   width: 100%;
@@ -27,8 +33,12 @@ body {
   overflow: hidden;
 }
 
+/* =========================================
+   3. বাম দিকের সাইডবার (লোগো ও মেসেজ)
+========================================= */
 .auth-sidebar {
   flex: 1;
+  /* ব্যাকগ্রাউন্ডে ছবি ও গ্রেডিয়েন্ট কালার */
   background:
     linear-gradient(135deg, rgba(27, 67, 50, 0.9), rgba(45, 106, 79, 0.85)),
     url("https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=1000")
@@ -48,11 +58,14 @@ body {
   color: #ffb703;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
+
 .sidebar-content p {
   font-size: 1.1rem;
   line-height: 1.6;
   opacity: 0.9;
 }
+
+/* সাইডবারের ভাসমান আইকন অ্যানিমেশন */
 .field-icon {
   margin-top: 30px;
   font-size: 4rem;
@@ -70,6 +83,9 @@ body {
   }
 }
 
+/* =========================================
+   4. ডান দিকের ফর্ম সেকশন
+========================================= */
 .auth-form-section {
   flex: 1.2;
   padding: 40px;
@@ -79,24 +95,29 @@ body {
   overflow-y: auto;
   position: relative;
 }
+
 .form-box {
   width: 100%;
   max-width: 420px;
 }
+
 .form-header h3 {
   font-size: 1.6rem;
   color: #1b4332;
   margin-bottom: 5px;
 }
+
 .form-header p {
   color: #6c757d;
   font-size: 0.95rem;
   margin-bottom: 25px;
 }
 
+/* ফর্ম হাইড এবং শো করার ক্লাস ও অ্যানিমেশন */
 .hidden-form {
   display: none !important;
 }
+
 .active-form {
   display: block;
   animation: fadeInSlideUp 0.4s ease-out forwards;
@@ -113,18 +134,24 @@ body {
   }
 }
 
+/* =========================================
+   5. রোল সিলেকশন (ক্রেতা নাকি কৃষক)
+========================================= */
 .role-selection {
   display: flex;
   gap: 15px;
   margin-bottom: 25px;
 }
+
 .role-card {
   flex: 1;
   cursor: pointer;
 }
+
 .role-card input[type="radio"] {
-  display: none;
+  display: none; /* ডিফল্ট রেডিও বাটন লুকানো */
 }
+
 .role-content {
   border: 2px solid #e2e8f0;
   border-radius: 12px;
@@ -137,6 +164,7 @@ body {
   gap: 8px;
   color: #4a5568;
 }
+
 .role-content i {
   font-size: 1.4rem;
 }
@@ -144,6 +172,8 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+/* যখন রোল সিলেক্ট করা হবে তখনকার ডিজাইন */
 .role-card input[type="radio"]:checked + .role-content {
   border-color: #2d6a4f;
   background-color: rgba(45, 106, 79, 0.08);
@@ -151,10 +181,14 @@ body {
   box-shadow: 0 4px 12px rgba(45, 106, 79, 0.15);
 }
 
+/* =========================================
+   6. ইনপুট ফিল্ড ও আইকন
+========================================= */
 .input-group {
   position: relative;
   margin-bottom: 18px;
 }
+
 .input-icon {
   position: absolute;
   left: 15px;
@@ -163,6 +197,7 @@ body {
   color: #95a5a6;
   transition: color 0.3s ease;
 }
+
 .input-group input {
   width: 100%;
   padding: 12px 45px 12px 45px;
@@ -173,15 +208,18 @@ body {
   transition: all 0.3s ease;
   background-color: #fafafa;
 }
+
 .input-group input:focus {
   border-color: #2d6a4f;
   background-color: #ffffff;
   box-shadow: 0 0 8px rgba(45, 106, 79, 0.2);
 }
+
 .input-group input:focus ~ .input-icon {
   color: #2d6a4f;
 }
 
+/* পাসওয়ার্ড দেখার (চোখ) আইকন */
 .toggle-password {
   position: absolute;
   right: 15px;
@@ -192,15 +230,20 @@ body {
   transition: color 0.3s ease;
   font-size: 1.1rem;
 }
+
 .toggle-password:hover {
   color: #2d6a4f;
 }
 
+/* =========================================
+   7. লিংক এবং সাবমিট বাটন
+========================================= */
 .forgot-pass-link {
   text-align: right;
   margin-bottom: 20px;
   margin-top: -10px;
 }
+
 .forgot-pass-link a {
   color: #ffb703;
   text-decoration: none;
@@ -208,6 +251,7 @@ body {
   font-weight: 500;
   transition: color 0.3s;
 }
+
 .forgot-pass-link a:hover {
   color: #2d6a4f;
 }
@@ -229,6 +273,7 @@ body {
   gap: 10px;
   box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2);
 }
+
 .btn-submit:hover {
   background: linear-gradient(135deg, #1b4332, #2d6a4f);
   box-shadow: 0 6px 20px rgba(27, 67, 50, 0.3);
@@ -241,16 +286,21 @@ body {
   font-size: 0.95rem;
   color: #6c757d;
 }
+
 .form-footer a {
   color: #ffb703;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
 }
+
 .form-footer a:hover {
   color: #2d6a4f;
 }
 
+/* =========================================
+   8. মোবাইল রেসপন্সিভ (ছোট স্ক্রিনের জন্য)
+========================================= */
 @media (max-width: 768px) {
   .auth-container {
     flex-direction: column;

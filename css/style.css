@@ -1,5 +1,5 @@
 /* =========================================
-   গ্লোবাল ফন্ট ও রিসেট (সারা ওয়েবসাইটের জন্য)
+   1. গ্লোবাল ফন্ট ও রিসেট (সারা ওয়েবসাইটের জন্য)
 ========================================= */
 @import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap");
 
@@ -16,14 +16,16 @@ body {
 }
 
 /* =========================================
-   ড্যাশবোর্ড লেআউট
+   2. ড্যাশবোর্ড লেআউট কন্টেইনার
 ========================================= */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
 }
 
-/* ================= সাইডবার ================= */
+/* =========================================
+   3. সাইডবার (বাম দিকের মেনু)
+========================================= */
 .sidebar {
   width: 260px;
   background-color: #1b4332;
@@ -45,7 +47,7 @@ body {
 }
 
 .close-btn {
-  display: none;
+  display: none; /* শুধুমাত্র মোবাইল ভিউতে দেখাবে */
   cursor: pointer;
   font-size: 1.2rem;
 }
@@ -92,7 +94,9 @@ body {
   font-weight: 600;
 }
 
-/* ================= মূল কন্টেন্ট ================= */
+/* =========================================
+   4. মূল কন্টেন্ট ও টপবার (ডান দিকের অংশ)
+========================================= */
 .main-content {
   flex: 1;
   display: flex;
@@ -114,7 +118,7 @@ body {
   font-size: 1.5rem;
   color: #1b4332;
   cursor: pointer;
-  display: none;
+  display: none; /* শুধুমাত্র মোবাইল ভিউতে দেখাবে */
 }
 
 .user-profile {
@@ -150,7 +154,9 @@ body {
   margin-bottom: 25px;
 }
 
-/* ================= স্ট্যাটাস কার্ডস ================= */
+/* =========================================
+   5. স্ট্যাটাস কার্ডস (ওভারভিউ পেজ)
+========================================= */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -186,14 +192,15 @@ body {
   font-weight: 500;
   margin-bottom: 5px;
 }
-
 .stat-info p {
   font-size: 1.4rem;
   font-weight: 700;
   color: #1b4332;
 }
 
-/* ================= টেবিল ডিজাইন ================= */
+/* =========================================
+   6. টেবিল ডিজাইন (অর্ডার লিস্ট)
+========================================= */
 .recent-orders {
   background-color: white;
   padding: 25px;
@@ -226,19 +233,16 @@ body {
 .table-responsive {
   overflow-x: auto;
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
 }
-
 th,
 td {
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
-
 th {
   background-color: #f8f9fa;
   color: #4a5568;
@@ -251,43 +255,17 @@ th {
   font-size: 0.85rem;
   font-weight: 600;
 }
-
 .status.pending {
   background-color: #fff3cd;
   color: #856404;
 }
-
 .status.completed {
   background-color: #d4edda;
   color: #155724;
 }
 
-/* ================= রেসপন্সিভ ডিজাইন ================= */
-@media (max-width: 992px) {
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    z-index: 1000;
-    transform: translateX(-100%);
-  }
-
-  .sidebar.active {
-    transform: translateX(0);
-  }
-
-  .close-btn {
-    display: block;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-}
-
 /* =========================================
-   Fiverr স্টাইল টগল বাটন ও মোড সুইচিং
+   7. মোড সুইচিং এবং ভিউ কন্ট্রোল
 ========================================= */
 .topbar-right {
   display: flex;
@@ -310,7 +288,6 @@ th {
   align-items: center;
   gap: 8px;
 }
-
 .mode-switch-btn:hover {
   background-color: #1b4332;
   color: white;
@@ -321,36 +298,33 @@ th {
   display: none !important;
 }
 
-/* Active view panel animation for smoother toggle transitions. */
+/* Active view panel animation */
 .active-view {
   display: block;
   animation: fadeIn 0.4s ease-out;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Buyer mode badge styling applied when buyer dashboard is active. */
+/* বায়ার মোডের ব্যাজ স্টাইল */
 .buyer-badge {
   background-color: #e3f2fd !important;
   color: #1976d2 !important;
 }
 
 /* =========================================
-   হোমপেজ ডিজাইন (Navbar & Hero)
+   8. হোমপেজ ডিজাইন (Navbar & Hero)
 ========================================= */
 .home-body {
   display: block;
-  /* ড্যাশবোর্ডের flex ওভাররাইড করার জন্য */
   background-color: #f9fafb;
 }
 
@@ -380,7 +354,6 @@ th {
   align-items: center;
   gap: 8px;
 }
-
 .logo i {
   color: #ffb703;
 }
@@ -392,14 +365,12 @@ th {
   border-radius: 8px;
   overflow: hidden;
 }
-
 .search-bar input {
   flex: 1;
   padding: 10px 15px;
   border: none;
   outline: none;
 }
-
 .search-bar button {
   background-color: #2d6a4f;
   color: white;
@@ -408,7 +379,6 @@ th {
   cursor: pointer;
   transition: 0.3s;
 }
-
 .search-bar button:hover {
   background-color: #1b4332;
 }
@@ -418,14 +388,12 @@ th {
   align-items: center;
   gap: 20px;
 }
-
 .nav-links a {
   text-decoration: none;
   color: #4a5568;
   font-weight: 500;
   transition: 0.3s;
 }
-
 .nav-links a:hover {
   color: #2d6a4f;
 }
@@ -438,14 +406,12 @@ th {
   font-size: 0.8rem;
   font-weight: 700;
 }
-
 .btn-login {
   background-color: #1b4332;
   color: white !important;
   padding: 8px 20px;
   border-radius: 6px;
 }
-
 .btn-login:hover {
   background-color: #2d6a4f;
 }
@@ -470,7 +436,6 @@ th {
   margin-bottom: 15px;
   color: #ffb703;
 }
-
 .hero-content p {
   font-size: 1.1rem;
   margin-bottom: 25px;
@@ -478,7 +443,6 @@ th {
   margin-left: auto;
   margin-right: auto;
 }
-
 .btn-shop-now {
   background-color: #ffb703;
   color: #1b4332;
@@ -489,28 +453,25 @@ th {
   display: inline-block;
   transition: 0.3s;
 }
-
 .btn-shop-now:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(255, 183, 3, 0.3);
 }
 
 /* =========================================
-   প্রোডাক্ট গ্রিড
+   9. প্রোডাক্ট গ্রিড (পণ্যের তালিকা)
 ========================================= */
 .main-products {
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 20px;
 }
-
 .section-title {
   margin-bottom: 30px;
   color: #1b4332;
   border-bottom: 2px solid #e2e8f0;
   padding-bottom: 10px;
 }
-
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -524,12 +485,10 @@ th {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: 0.3s;
 }
-
 .product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
-
 .product-card img {
   width: 100%;
   height: 200px;
@@ -539,7 +498,6 @@ th {
 .product-details {
   padding: 20px;
 }
-
 .category-tag {
   background-color: #e8f5e9;
   color: #2d6a4f;
@@ -550,19 +508,16 @@ th {
   display: inline-block;
   margin-bottom: 10px;
 }
-
 .product-details h3 {
   font-size: 1.1rem;
   color: #333;
   margin-bottom: 10px;
 }
-
 .seller-info {
   font-size: 0.85rem;
   color: #6c757d;
   margin-bottom: 15px;
 }
-
 .seller-info i {
   color: #2d6a4f;
   margin-right: 3px;
@@ -575,13 +530,11 @@ th {
   border-top: 1px solid #f1f5f9;
   padding-top: 15px;
 }
-
 .price {
   font-size: 1.3rem;
   font-weight: 700;
   color: #1b4332;
 }
-
 .btn-add-cart {
   background-color: #e2e8f0;
   color: #4a5568;
@@ -592,29 +545,14 @@ th {
   cursor: pointer;
   transition: 0.3s;
 }
-
 .btn-add-cart:hover {
   background-color: #2d6a4f;
   color: white;
 }
 
-/* মোবাইল রেসপন্সিভ */
-@media (max-width: 768px) {
-  .nav-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .search-bar {
-    width: 100%;
-    flex: auto;
-  }
-
-  .hero-content h1 {
-    font-size: 2rem;
-  }
-}
-/* Add Product Form Style */
+/* =========================================
+   10. ফর্ম ডিজাইন (নতুন পণ্য যোগ করার ফর্ম)
+========================================= */
 .add-product-form {
   background: rgb(255, 255, 255);
   padding: 50px;
@@ -639,15 +577,14 @@ th {
   border-color: #2d6a4f;
   box-shadow: 0 0 8px rgba(45, 106, 79, 0.1);
 }
-@media (max-width: 768px) {
-  .input-grid {
-    grid-template-columns: 1fr;
-  }
-}
-/* Custom Beautiful Toast Style */
+
+/* =========================================
+   11. কাস্টম অ্যালার্ট (টোস্ট ও ডিলিট মোডাল)
+========================================= */
+/* টোস্ট নোটিফিকেশন স্টাইল */
 .toast-notification {
   position: fixed;
-  top: -100px; /* Initially hidden top side */
+  top: -100px;
   right: 30px;
   background: #ffffff;
   padding: 15px 25px;
@@ -661,30 +598,26 @@ th {
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   opacity: 0;
 }
-
-/* Show class jeta JS diye trigger hobe */
 .toast-notification.show {
-  top: 30px; /* Slide down into view */
+  top: 30px;
   opacity: 1;
 }
-
 .toast-icon {
   font-size: 2rem;
   color: #2d6a4f;
 }
-
 .toast-message h4 {
   color: #1b4332;
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 2px;
 }
-
 .toast-message p {
   color: #6c757d;
   font-size: 0.85rem;
 }
-/* Dynamic Toast Colors & Styles */
+
+/* টোস্ট কালার ভ্যারিয়েশন */
 .toast-notification.info {
   border-left-color: #1976d2;
 }
@@ -698,7 +631,7 @@ th {
   color: #d32f2f;
 }
 
-/* Custom Delete Modal Style */
+/* ডিলিট কনফার্মেশন মোডাল স্টাইল */
 .custom-modal {
   position: fixed;
   top: 0;
@@ -780,4 +713,42 @@ th {
 }
 .btn-confirm-delete:hover {
   background: #b71c1c;
+}
+
+/* =========================================
+   12. রেসপন্সিভ ডিজাইন (মোবাইল ও ট্যাবলেট ভিউ)
+========================================= */
+@media (max-width: 992px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1000;
+    transform: translateX(-100%);
+  }
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  .close-btn,
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .search-bar {
+    width: 100%;
+    flex: auto;
+  }
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
 }
