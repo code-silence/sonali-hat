@@ -1,89 +1,101 @@
 <!doctype html>
 <html lang="bn">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>সোনালী হাট - সরাসরি কৃষকের কাছ থেকে কিনুন</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-
-<body class="home-body">
-  <!-- Navbar section: brand, search, cart, and auth link -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="logo"><i class="fa-solid fa-wheat-awn"></i> সোনালী হাট</a>
-      <div class="search-bar">
-        <input type="text" placeholder="পণ্য বা জেলার নাম দিয়ে খুঁজুন..." />
-        <button type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>সোনালী হাট - সরাসরি কৃষকের কাছ থেকে কিনুন</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="home-body">
+    <!-- Navbar section: brand, search, cart, and auth link -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="logo"
+          ><i class="fa-solid fa-wheat-awn"></i> সোনালী হাট</a
+        >
+        <div class="search-bar">
+          <input type="text" placeholder="পণ্য বা জেলার নাম দিয়ে খুঁজুন..." />
+          <button type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <div class="nav-links">
+          <a href="#"
+            ><i class="fa-solid fa-cart-shopping"></i> কার্ট
+            <span class="cart-count">0</span></a
+          >
+          <a href="auth.html" class="btn-login">লগইন / সাইন-আপ</a>
+        </div>
       </div>
-      <div class="nav-links">
-        <a href="#"><i class="fa-solid fa-cart-shopping"></i> কার্ট
-          <span class="cart-count">0</span></a>
-        <a href="auth.html" class="btn-login">লগইন / সাইন-আপ</a>
+    </nav>
+
+    <!-- Hero banner promoting the marketplace and CTA -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>কৃষকের হাসি, ক্রেতার স্বস্তি</h1>
+        <p>
+          মধ্যস্বত্বভোগী ছাড়াই সরাসরি মাঠ থেকে সতেজ কৃষিপণ্য কিনে কৃষকের ন্যায্য
+          মূল্য নিশ্চিত করুন।
+        </p>
+        <a href="#products" class="btn-shop-now"
+          >পণ্য দেখুন <i class="fa-solid fa-arrow-down"></i
+        ></a>
       </div>
-    </div>
-  </nav>
+    </section>
 
-  <!-- Hero banner promoting the marketplace and CTA -->
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1>কৃষকের হাসি, ক্রেতার স্বস্তি</h1>
-      <p>
-        মধ্যস্বত্বভোগী ছাড়াই সরাসরি মাঠ থেকে সতেজ কৃষিপণ্য কিনে কৃষকের ন্যায্য
-        মূল্য নিশ্চিত করুন।
-      </p>
-      <a href="#products" class="btn-shop-now">পণ্য দেখুন <i class="fa-solid fa-arrow-down"></i></a>
-    </div>
-  </section>
+    <!-- Featured products grid -->
+    <main class="main-products" id="products">
+      <div class="section-title">
+        <h2><i class="fa-solid fa-leaf"></i> সদ্য যুক্ত হওয়া পণ্য</h2>
+      </div>
 
-  <!-- Featured products grid -->
-  <main class="main-products" id="products">
-    <div class="section-title">
-      <h2><i class="fa-solid fa-leaf"></i> সদ্য যুক্ত হওয়া পণ্য</h2>
-    </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <img
+            src="https://images.unsplash.com/photo-1518977676601-b14cf6907409?q=80&w=500"
+            alt="Potato"
+          />
+          <div class="product-details">
+            <span class="category-tag">সবজি</span>
+            <h3>বগুড়ার লাল আলু (১০ কেজি)</h3>
+            <p class="seller-info">
+              <i class="fa-solid fa-location-dot"></i> শিবগঞ্জ, বগুড়া |
+              <i class="fa-solid fa-user"></i> রহিম মিয়া
+            </p>
+            <div class="price-action">
+              <span class="price">৳ ৩৫০</span>
+              <button class="btn-add-cart">
+                <i class="fa-solid fa-cart-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
 
-    <div class="product-grid">
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1518977676601-b14cf6907409?q=80&w=500" alt="Potato" />
-        <div class="product-details">
-          <span class="category-tag">সবজি</span>
-          <h3>বগুড়ার লাল আলু (১০ কেজি)</h3>
-          <p class="seller-info">
-            <i class="fa-solid fa-location-dot"></i> শিবগঞ্জ, বগুড়া |
-            <i class="fa-solid fa-user"></i> রহিম মিয়া
-          </p>
-          <div class="price-action">
-            <span class="price">৳ ৩৫০</span>
-            <button class="btn-add-cart">
-              <i class="fa-solid fa-cart-plus"></i>
-            </button>
+        <div class="product-card">
+          <img
+            src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?q=80&w=500"
+            alt="Mango"
+          />
+          <div class="product-details">
+            <span class="category-tag">ফল</span>
+            <h3>রাজশাহী স্পেশাল আম (৫ কেজি)</h3>
+            <p class="seller-info">
+              <i class="fa-solid fa-location-dot"></i> বাঘা, রাজশাহী |
+              <i class="fa-solid fa-user"></i> করিমুল্লাহ
+            </p>
+            <div class="price-action">
+              <span class="price">৳ ৬০০</span>
+              <button class="btn-add-cart">
+                <i class="fa-solid fa-cart-plus"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?q=80&w=500" alt="Mango" />
-        <div class="product-details">
-          <span class="category-tag">ফল</span>
-          <h3>রাজশাহী স্পেশাল আম (৫ কেজি)</h3>
-          <p class="seller-info">
-            <i class="fa-solid fa-location-dot"></i> বাঘা, রাজশাহী |
-            <i class="fa-solid fa-user"></i> করিমুল্লাহ
-          </p>
-          <div class="price-action">
-            <span class="price">৳ ৬০০</span>
-            <button class="btn-add-cart">
-              <i class="fa-solid fa-cart-plus"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-</body>
-
+    </main>
+  </body>
 </html>
