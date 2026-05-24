@@ -1,7 +1,10 @@
-// Toggle the sidebar open and closed for smaller screens.
+// Toggle the sidebar and overlay open/closed for smaller screens.
 function toggleSidebar() {
   const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+
   sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
 }
 
 // Switch between seller and buyer dashboard views.
@@ -195,3 +198,70 @@ document
       );
     }
   });
+// --- Dynamic Active Menu Switcher ---
+document.querySelectorAll(".sidebar-menu li a").forEach((link) => {
+  link.addEventListener("click", function (e) {
+    // লগআউট বাটন হলে এই লজিক স্কিপ করবে
+    if (this.classList.contains("logout-btn")) return;
+
+    // সব মেনু থেকে active ক্লাস রিমুভ করা
+    document.querySelectorAll(".sidebar-menu li").forEach((li) => {
+      li.classList.remove("active");
+    });
+
+    // যেই মেনুতে ক্লিক করা হয়েছে, শুধু সেটাতে active ক্লাস অ্যাড করা
+    this.parentElement.classList.add("active");
+
+    // মোবাইল ভিউ হলে মেনুতে ক্লিক করার সাথে সাথেই সাইডবার বন্ধ করে দেওয়া
+    if (window.innerWidth <= 992) {
+      toggleSidebar();
+    }
+  });
+});
+// ==================================================
+// 8. Profile Settings Logic (প্রোফাইল ট্যাব ও ছবি পরিবর্তন)
+// ==================================================
+
+// Profile tab switch korar function
+function switchProfileTab(event, tabId) {
+  // Sob profile panels hide kora
+  const panels = document.querySelectorAll(".profile-tab-panel");
+  panels.forEach((panel) => {
+    panel.classList.remove("active-panel");
+    panel.classList.add("hidden-panel");
+  });
+
+  // Sob nav buttons current active reset kora
+  const tabButtons = document.querySelectorAll(".tab-nav-btn");
+  tabButtons.forEach((btn) => btn.classList.remove("active"));
+
+  // Active panel and active nav button trigger kora
+  document.getElementById(tabId).classList.remove("hidden-panel");
+  document.getElementById(tabId).classList.add("active-panel");
+  event.currentTarget.classList.add("active");
+}
+
+// User avatar device theke niye live preview dekhano
+function previewAvatar(inputElement) {
+  const file = inputElement.files[0];
+  if (file) {
+    const previewUrl = URL.createObjectURL(file);
+    document.getElementById("avatarPreview").src = previewUrl;
+    document.getElementById("userAvatar").src = previewUrl; // Topbar avatar o change hobe
+    showToast(
+      "ছবি লোড হয়েছে",
+      "প্রোফাইল ছবি সফলভাবে প্রিভিউ করা হয়েছে।",
+      "success",
+    );
+  }
+}
+
+// Profile button form click submit handler toast notification
+function saveProfileChanges(event) {
+  event.preventDefault();
+  showToast(
+    "সংরক্ষিত হয়েছে!",
+    "আপনার সেটিংস সফলভাবে আপডেট করা হয়েছে।",
+    "success",
+  );
+}

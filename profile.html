@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>সোনালী হাট - প্রোফাইল সেটিংস</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+        onclick="toggleSidebar()"
+      ></div>
+
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h2><i class="fa-solid fa-wheat-awn"></i> সোনালী হাট</h2>
+        </div>
+
+        <ul class="sidebar-menu" id="sidebarMenu">
+          <li>
+            <a href="dashboard.html"
+              ><i class="fa-solid fa-house"></i> এক নজরে</a
+            >
+          </li>
+          <li>
+            <a href="dashboard.html"
+              ><i class="fa-solid fa-clipboard-list"></i> আমার অর্ডারসমূহ</a
+            >
+          </li>
+
+          <li class="seller-item">
+            <a href="dashboard.html"
+              ><i class="fa-solid fa-circle-plus"></i> নতুন পণ্য যোগ করুন</a
+            >
+          </li>
+          <li class="seller-item">
+            <a href="dashboard.html"
+              ><i class="fa-solid fa-boxes-stacked"></i> আমার পণ্যসমূহ</a
+            >
+          </li>
+          <li class="seller-item">
+            <a href="dashboard.html"
+              ><i class="fa-solid fa-wallet"></i> পেমেন্ট হিস্ট্রি</a
+            >
+          </li>
+
+          <li class="active">
+            <a href="profile.html"
+              ><i class="fa-solid fa-user-gear"></i> প্রোফাইল সেটিংস</a
+            >
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <a href="auth.html" class="logout-btn"
+            ><i class="fa-solid fa-arrow-right-from-bracket"></i> লগআউট</a
+          >
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+          <div class="topbar-right">
+            <div class="user-profile">
+              <span class="user-role-badge" id="roleBadge">কৃষক (Seller)</span>
+              <img
+                src="https://ui-avatars.com/api/?name=User&background=2d6a4f&color=fff"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+            </div>
+          </div>
+        </header>
+
+        <div class="content-wrapper">
+          <h3 class="welcome-text">প্রোফাইল সেটিংস</h3>
+
+          <div class="profile-settings-container">
+            <div class="profile-tabs-nav">
+              <button
+                class="tab-nav-btn active"
+                onclick="switchProfileTab(event, 'basicInfoTab')"
+              >
+                <i class="fa-solid fa-user"></i> সাধারণ তথ্য
+              </button>
+              <button
+                class="tab-nav-btn"
+                onclick="switchProfileTab(event, 'addressTab')"
+              >
+                <i class="fa-solid fa-location-dot"></i> ঠিকানা ও লোকেশন
+              </button>
+              <button
+                class="tab-nav-btn"
+                onclick="switchProfileTab(event, 'paymentTab')"
+              >
+                <i class="fa-solid fa-wallet"></i> পেমেন্ট সেটিংস
+              </button>
+              <button
+                class="tab-nav-btn"
+                onclick="switchProfileTab(event, 'securityTab')"
+              >
+                <i class="fa-solid fa-shield-halved"></i> নিরাপত্তা
+              </button>
+            </div>
+
+            <div class="profile-tabs-content">
+              <div id="basicInfoTab" class="profile-tab-panel active-panel">
+                <h4>সাধারণ তথ্য পরিবর্তন করুন</h4>
+                <div class="avatar-upload-section">
+                  <img
+                    src="https://ui-avatars.com/api/?name=User&background=2d6a4f&color=fff"
+                    alt="Avatar Preview"
+                    id="avatarPreview"
+                  />
+                  <div>
+                    <input
+                      type="file"
+                      id="avatarInput"
+                      accept="image/*"
+                      style="display: none"
+                      onchange="previewAvatar(this)"
+                    />
+                    <button
+                      class="btn-view-all"
+                      onclick="document.getElementById('avatarInput').click()"
+                    >
+                      <i class="fa-solid fa-camera"></i> ছবি পরিবর্তন করুন
+                    </button>
+                    <p
+                      style="font-size: 0.8rem; color: #6c757d; margin-top: 5px"
+                    >
+                      JPG, JPEG, PNG অথবা WEBP ফাইল সাপোর্ট করবে
+                    </p>
+                  </div>
+                </div>
+                <form onsubmit="saveProfileChanges(event)">
+                  <div class="form-grid-2">
+                    <input
+                      type="text"
+                      placeholder="আপনার সম্পূর্ণ নাম"
+                      required
+                    />
+                    <input
+                      type="email"
+                      placeholder="ইমেইল অ্যাড্রেস"
+                      required
+                    />
+                    <input type="text" placeholder="মোবাইল নম্বর" required />
+                  </div>
+                  <div style="text-align: center; margin-top: 30px">
+                    <button type="submit" class="btn-save-settings">
+                      তথ্য সেভ করুন
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div id="addressTab" class="profile-tab-panel hidden-panel">
+                <h4>ঠিকানা ও লোকেশন</h4>
+                <form onsubmit="saveProfileChanges(event)">
+                  <div class="form-grid-2">
+                    <select
+                      id="divisionSelect"
+                      class="profile-input-box"
+                      onchange="loadDistricts()"
+                      required
+                      style="background-color: white; cursor: pointer"
+                    >
+                      <option value="" disabled selected>
+                        বিভাগ নির্বাচন করুন
+                      </option>
+                    </select>
+
+                    <select
+                      id="districtSelect"
+                      class="profile-input-box"
+                      onchange="loadUpazilas()"
+                      required
+                      disabled
+                      style="background-color: white; cursor: pointer"
+                    >
+                      <option value="" disabled selected>
+                        আগে বিভাগ নির্বাচন করুন
+                      </option>
+                    </select>
+
+                    <select
+                      id="upazilaSelect"
+                      class="profile-input-box"
+                      required
+                      disabled
+                      style="background-color: white; cursor: pointer"
+                    >
+                      <option value="" disabled selected>
+                        আগে জেলা নির্বাচন করুন
+                      </option>
+                    </select>
+
+                    <input
+                      type="text"
+                      class="profile-input-box"
+                      placeholder="গ্রাম/এলাকা (যেমন: চণ্ডীহারা)"
+                      required
+                    />
+                  </div>
+                  <div style="text-align: center; margin-top: 30px">
+                    <button type="submit" class="btn-save-settings">
+                      ঠিকানা আপডেট করুন
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div id="paymentTab" class="profile-tab-panel hidden-panel">
+                <h4>পেমেন্ট সেটিংস</h4>
+                <p
+                  style="color: #6c757d; font-size: 0.9rem; margin-bottom: 20px"
+                >
+                  লেনদেনের জন্য আপনার বিকাশ বা নগদ নম্বরটি সেট করে রাখুন।
+                </p>
+                <form onsubmit="saveProfileChanges(event)">
+                  <div class="form-grid-2">
+                    <div class="payment-input-wrapper">
+                      <span class="payment-type-label bkash-bg">বিকাশ</span>
+                      <input
+                        type="text"
+                        placeholder="বিকাশ নম্বর সেট করে রাখুন"
+                      />
+                    </div>
+                    <div class="payment-input-wrapper">
+                      <span class="payment-type-label nagad-bg">নগদ</span>
+                      <input
+                        type="text"
+                        placeholder="নগদ নম্বর সেট করে রাখুন"
+                      />
+                    </div>
+                  </div>
+                  <div style="text-align: center; margin-top: 30px">
+                    <button type="submit" class="btn-save-settings">
+                      পেমেন্ট নম্বর সেভ করুন
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div id="securityTab" class="profile-tab-panel hidden-panel">
+                <h4>পাসওয়ার্ড পরিবর্তন করুন</h4>
+                <form onsubmit="saveProfileChanges(event)">
+                  <div
+                    style="
+                      display: flex;
+                      flex-direction: column;
+                      gap: 15px;
+                      max-width: 400px;
+                    "
+                  >
+                    <div style="position: relative">
+                      <input
+                        type="password"
+                        class="profile-input-box"
+                        placeholder="বর্তমান পাসওয়ার্ড"
+                        required
+                        style="width: 100%; padding-right: 40px"
+                      />
+                      <i
+                        class="fa-solid fa-eye"
+                        onclick="toggleProfilePassword(this)"
+                        style="
+                          position: absolute;
+                          right: 15px;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          color: #95a5a6;
+                          cursor: pointer;
+                          font-size: 1.1rem;
+                          transition: 0.3s;
+                        "
+                      ></i>
+                    </div>
+
+                    <div style="position: relative">
+                      <input
+                        type="password"
+                        class="profile-input-box"
+                        placeholder="নতুন পাসওয়ার্ড"
+                        required
+                        style="width: 100%; padding-right: 40px"
+                      />
+                      <i
+                        class="fa-solid fa-eye"
+                        onclick="toggleProfilePassword(this)"
+                        style="
+                          position: absolute;
+                          right: 15px;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          color: #95a5a6;
+                          cursor: pointer;
+                          font-size: 1.1rem;
+                          transition: 0.3s;
+                        "
+                      ></i>
+                    </div>
+
+                    <div style="position: relative">
+                      <input
+                        type="password"
+                        class="profile-input-box"
+                        placeholder="নতুন পাসওয়ার্ড আবার দিন"
+                        required
+                        style="width: 100%; padding-right: 40px"
+                      />
+                      <i
+                        class="fa-solid fa-eye"
+                        onclick="toggleProfilePassword(this)"
+                        style="
+                          position: absolute;
+                          right: 15px;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          color: #95a5a6;
+                          cursor: pointer;
+                          font-size: 1.1rem;
+                          transition: 0.3s;
+                        "
+                      ></i>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 10px">
+                      <button
+                        type="submit"
+                        class="btn-save-settings"
+                        style="background-color: #d32f2f"
+                      >
+                        পাসওয়ার্ড আপডেট করুন
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="dynamicToast" class="toast-notification">
+      <i id="toastIcon" class="fa-solid fa-circle-check toast-icon"></i>
+      <div class="toast-message">
+        <h4 id="toastTitle">সফল হয়েছে!</h4>
+        <p id="toastText">আপনার তথ্য আপডেট করা হয়েছে।</p>
+      </div>
+    </div>
+
+    <script src="js/profile.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
