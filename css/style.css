@@ -752,3 +752,186 @@ th {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================
+   Sidebar Overlay (মোবাইলে স্ক্রিনে ক্লিক করার জন্য)
+========================================= */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* সাইডবারের ঠিক নিচে থাকবে */
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ডেস্কটপ বা বড় স্ক্রিনে ওভারলে লুকিয়ে রাখা */
+@media (min-width: 993px) {
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+/* =========================================
+   Profile Settings Special Custom Styles
+========================================= */
+.profile-settings-container {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  min-height: 500px;
+}
+
+/* Tabs Navigation Styling */
+.profile-tabs-nav {
+  width: 240px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+  gap: 8px;
+}
+.tab-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #4a5568;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.3s;
+}
+.tab-nav-btn:hover,
+.tab-nav-btn.active {
+  background-color: #2d6a4f;
+  color: white;
+}
+
+/* Tab Panels Grid Styling */
+.profile-tabs-content {
+  flex: 1;
+  padding: 30px;
+}
+.profile-tab-panel h4 {
+  color: #1b4332;
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 10px;
+}
+.hidden-panel {
+  display: none !important;
+}
+.active-panel {
+  display: block;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Avatar Upload Preview */
+.avatar-upload-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+#avatarPreview {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2d6a4f;
+}
+
+/* Forms layouts for profile fields */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+.form-grid-2 input,
+.profile-input-box {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #dcdde1;
+  border-radius: 8px;
+  outline: none;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+.form-grid-2 input:focus,
+.profile-input-box:focus {
+  border-color: #2d6a4f;
+  box-shadow: 0 0 8px rgba(45, 106, 79, 0.1);
+}
+
+/* Custom Payment badge wrapper */
+.payment-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.payment-type-label {
+  position: absolute;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.bkash-bg {
+  background-color: #e2136e;
+}
+.nagad-bg {
+  background-color: #f26522;
+}
+.payment-input-wrapper input {
+  padding-left: 75px;
+}
+
+/* Settings Form Buttons */
+.btn-save-settings {
+  background-color: #2d6a4f;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-save-settings:hover {
+  background-color: #1b4332;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .profile-settings-container {
+    flex-direction: column;
+  }
+  .profile-tabs-nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
