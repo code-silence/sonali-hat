@@ -1,199 +1,375 @@
-// Toggle the sidebar open and closed for smaller screens.
-function toggleSidebar() {
+
+import { auth, db } from "./firebase.js";
+import { uploadProductImage } from "./supabase.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+  getDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+console.log('dashboard.js module loaded');
+
+window.addEventListener('error', (ev) => {
+  console.error('Window error captured:', ev.error || ev.message, ev);
+});
+
+window.addEventListener('unhandledrejection', (ev) => {
+  console.error('Unhandled promise rejection:', ev.reason);
+});
+
+/* ---------------- UI CONTROLS ---------------- */
+
+window.toggleSidebar = function () {
   const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("active");
-}
+  if (sidebar) sidebar.classList.toggle("active");
+};
 
-// Switch between seller and buyer dashboard views.
-function toggleDashboardMode() {
-  const sellerDashboard = document.getElementById("sellerDashboard");
+window.switchDashboardView = function (viewId) {
+  document.querySelectorAll(".dashboard-view").forEach((v) => {
+    v.classList.add("hidden-view");
+    v.classList.remove("active-view");
+  });
+
+  const target = document.getElementById(viewId);
+  if (!target) return;
+  target.classList.remove("hidden-view");
+  target.classList.add("active-view");
+};
+
+window.toggleDashboardMode = function () {
   const buyerDashboard = document.getElementById("buyerDashboard");
-
+  const sellerDashboard = document.getElementById("sellerDashboard");
   const modeText = document.getElementById("modeText");
-  const roleBadge = document.getElementById("roleBadge");
-
-  const sellerItems = document.querySelectorAll(".seller-item");
   const buyerItems = document.querySelectorAll(".buyer-item");
 
-  if (sellerDashboard.classList.contains("active-view")) {
-    // Currently in seller view: switch to buyer view.
-    sellerDashboard.classList.remove("active-view");
-    sellerDashboard.classList.add("hidden-view");
-    buyerDashboard.classList.remove("hidden-view");
-    buyerDashboard.classList.add("active-view");
-
-    modeText.innerText = "Switch to Selling";
-    roleBadge.innerText = "ক্রেতা (Buyer)";
-    roleBadge.classList.add("buyer-badge");
-
-    sellerItems.forEach((item) => item.classList.add("hidden-view"));
-    buyerItems.forEach((item) => item.classList.remove("hidden-view"));
-  } else {
-    // Currently in buyer view: switch to seller view.
-    buyerDashboard.classList.remove("active-view");
-    buyerDashboard.classList.add("hidden-view");
-    sellerDashboard.classList.remove("hidden-view");
-    sellerDashboard.classList.add("active-view");
-
-    modeText.innerText = "Switch to Buying";
-    roleBadge.innerText = "কৃষক (Seller)";
-    roleBadge.classList.remove("buyer-badge");
-
-    buyerItems.forEach((item) => item.classList.add("hidden-view"));
-    sellerItems.forEach((item) => item.classList.remove("hidden-view"));
-  }
-}
-// Sidebar theke onno view te switch korar jonno
-function switchDashboardView(viewId) {
-  // Sob view hide kora
-  const views = document.querySelectorAll(".dashboard-view");
-  views.forEach((view) => {
-    view.classList.remove("active-view");
-    view.classList.add("hidden-view");
-  });
-
-  // Select kora view ta show kora
-  const activeView = document.getElementById(viewId);
-  if (activeView) {
-    activeView.classList.remove("hidden-view");
-    activeView.classList.add("active-view");
-  }
-}
-
-// --- Reusable Dynamic Toast Function ---
-function showToast(title, message, type = "success") {
-  const toast = document.getElementById("dynamicToast");
-  const toastTitle = document.getElementById("toastTitle");
-  const toastText = document.getElementById("toastText");
-  const toastIcon = document.getElementById("toastIcon");
-
-  // Reset previous classes
-  toast.className = "toast-notification show";
-  toastIcon.className = "toast-icon fa-solid";
-
-  // Set dynamic text
-  toastTitle.innerText = title;
-  toastText.innerText = message;
-
-  // Set specific icon and color based on type
-  if (type === "success") {
-    toastIcon.classList.add("fa-circle-check");
-  } else if (type === "info") {
-    toast.classList.add("info");
-    toastIcon.classList.add("fa-circle-info");
-  } else if (type === "error") {
-    toast.classList.add("error");
-    toastIcon.classList.add("fa-trash-can");
+  if (buyerDashboard) {
+    buyerDashboard.classList.toggle("hidden-view");
+    buyerDashboard.classList.toggle("active-view");
   }
 
-  // Auto hide after 3 seconds
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
-}
+  if (sellerDashboard) {
+    sellerDashboard.classList.toggle("hidden-view");
+    sellerDashboard.classList.toggle("active-view");
+  }
 
-// --- Add Product Form Submit Logic ---
-document
-  .getElementById("addProductForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
+  buyerItems.forEach((item) => item.classList.toggle("hidden-view"));
 
-    const name = document.getElementById("pName").value;
-    const weight = document.getElementById("pWeight").value;
-    const category = document.getElementById("pCategory").value;
-    const price = document.getElementById("pPrice").value;
-    const location = document.getElementById("pLocation").value;
-    const seller = document.getElementById("pSeller").value;
+  if (modeText && buyerDashboard) {
+    modeText.textContent = buyerDashboard.classList.contains("active-view")
+      ? "Switch to Selling"
+      : "Switch to Buying";
+  }
+};
 
-    const imageInput = document.getElementById("pImage");
-    const imageFile = imageInput.files[0];
+window.closeDeleteModal = function () {
+  const modal = document.getElementById("deleteModal");
+  if (modal) modal.classList.add("hidden-modal");
+};
 
-    if (imageFile) {
-      const imageUrl = URL.createObjectURL(imageFile);
+window.logout = async function (event) {
+  event?.preventDefault();
 
-      const productCard = `
-            <div class="product-card">
-                <img src="${imageUrl}" alt="${name}" style="width: 100%; height: 200px; object-fit: cover;">
-                <div class="product-details">
-                    <span class="category-tag">${category}</span>
-                    <h3>${name}</h3>
-                    <p class="seller-info"><i class="fa-solid fa-location-dot"></i> ${location} | <i class="fa-solid fa-user"></i> ${seller}</p>
-                    <p class="package-info">প্যাকেজ: ${weight}</p>
-                    <div class="price-action" style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 15px; margin-top: 10px;">
-                        <span class="price">৳ ${price}</span>
-                        <div class="action-buttons" style="display: flex; gap: 8px;">
-                            <button onclick="editProduct(this, '${name}', '${weight}', '${category}', '${price}', '${location}', '${seller}')" style="background:#e8f5e9; color:#2d6a4f; border:none; width: 35px; height: 35px; border-radius:5px; cursor:pointer; transition:0.3s;" title="Edit">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button onclick="deleteProduct(this)" style="background:#ffebee; color:#d32f2f; border:none; width: 35px; height: 35px; border-radius:5px; cursor:pointer; transition:0.3s;" title="Delete">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
 
-      document.getElementById("myProductList").innerHTML += productCard;
-      this.reset();
+  window.location.href = "auth.html";
+};
 
-      // Custom Success Toast
-      showToast(
-        "সফল হয়েছে!",
-        "আপনার পণ্যটি তালিকায় সফলভাবে যোগ করা হয়েছে।",
-        "success",
-      );
 
-      setTimeout(() => {
-        switchDashboardView("myProductsView");
-      }, 1000);
+/* ---------------- AUTH CHECK ---------------- */
+
+onAuthStateChanged(auth, async (user) => {
+  console.log('Auth state changed:', user);
+
+  if (!user) {
+    console.log('User not logged in, redirecting to auth.html');
+    window.location.href = "auth.html";
+    return;
+  }
+
+  try {
+    const userSnap = await getDoc(doc(db, "users", user.uid));
+    const role = userSnap.exists() ? userSnap.data().role : "buyer";
+    console.log('Authenticated user role:', role, 'uid:', user.uid);
+
+    if (role !== "seller") {
+      console.log('User is not seller, redirecting to index.html');
+      window.location.href = "index.html";
+      return;
     }
-  });
 
-// --- Edit Product Function (পুরোপুরি অ্যালার্ট মুক্ত) ---
-function editProduct(buttonElement, name, weight, category, price, location, seller) {
-  // ফর্মের ফিল্ডগুলোতে আগের ডেটা বসিয়ে দেওয়া
-  document.getElementById("pName").value = name;
-  document.getElementById("pWeight").value = weight;
-  document.getElementById("pCategory").value = category;
-  document.getElementById("pPrice").value = price;
-  document.getElementById("pLocation").value = location;
-  document.getElementById("pSeller").value = seller;
+    const roleBadge = document.getElementById("roleBadge");
+    if (roleBadge) roleBadge.textContent = "কৃষক (Seller)";
 
-  // ইউজারকে ফর্ম ভিউতে নিয়ে যাওয়া
-  switchDashboardView("addProductView");
+    const avatar = document.getElementById("userAvatar");
+    if (avatar) avatar.alt = user.displayName || "Seller";
 
-  // আগের কার্ডটি মুছে ফেলা, যাতে সেভ করলে আপডেট হয়
-  buttonElement.closest(".product-card").remove();
+    await loadMyProducts(user.uid);
+    switchDashboardView("sellerDashboard");
+  } catch (error) {
+    console.error("Auth setup error:", error);
+    window.location.href = "auth.html";
+  }
+});
 
-  // এখানে কোনো alert() বা showToast() থাকবে না!
+/* ---------------- ADD PRODUCT ---------------- */
+
+function createProductCard(docSnap) {
+  const p = docSnap.data() || {};
+
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.dataset.prodId = docSnap.id;
+
+  if (p.imageUrl) {
+    const img = document.createElement('img');
+    img.src = p.imageUrl;
+    img.alt = p.title || 'Product image';
+    img.style.cssText = 'width:100%; height:200px; object-fit:cover;';
+    card.appendChild(img);
+  }
+
+  const details = document.createElement('div');
+  details.className = 'product-details';
+
+  const categoryTag = document.createElement('span');
+  categoryTag.className = 'category-tag';
+  categoryTag.textContent = p.category || '';
+
+  const title = document.createElement('h3');
+  title.textContent = p.title || '';
+
+  const weight = document.createElement('p');
+  weight.textContent = p.weight || '';
+
+  const location = document.createElement('p');
+  location.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${p.location || ''}`;
+
+  const priceAction = document.createElement('div');
+  priceAction.className = 'price-action';
+
+  const price = document.createElement('span');
+  price.className = 'price';
+  price.textContent = `৳ ${p.price ?? '0'}`;
+
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.className = 'delete-product-btn';
+  deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+  deleteButton.addEventListener('click', () => deleteProduct(docSnap.id));
+
+  priceAction.append(price, deleteButton);
+  details.append(categoryTag, title, weight, location, priceAction);
+  card.append(details);
+
+  return card;
 }
 
-// --- Delete Product Logic with Custom Modal ---
-let productToDelete = null;
-
-function deleteProduct(buttonElement) {
-  productToDelete = buttonElement.closest(".product-card");
-  document.getElementById("deleteModal").classList.remove("hidden-modal"); // Show Modal
+function resetProductList(list) {
+  list.replaceChildren();
 }
 
-function closeDeleteModal() {
-  productToDelete = null;
-  document.getElementById("deleteModal").classList.add("hidden-modal"); // Hide Modal
-}
+async function handleAddProductSubmit(e) {
+  e.preventDefault();
 
-document
-  .getElementById("confirmDeleteBtn")
-  .addEventListener("click", function () {
-    if (productToDelete) {
-      productToDelete.remove();
-      closeDeleteModal();
+  const form = e.target?.closest ? e.target.closest('#addProductForm') : document.getElementById('addProductForm');
+  if (!form) return;
 
-      // Custom Error/Delete Toast
-      showToast(
-        "মুছে ফেলা হয়েছে",
-        "পণ্যটি তালিকা থেকে সফলভাবে ডিলিট করা হয়েছে।",
-        "error",
-      );
+  const user = auth.currentUser;
+  if (!user) {
+    alert("অনুগ্রহ করে প্রথমে লগইন করুন।");
+    return;
+  }
+
+  const submitButton = form.querySelector("button[type='submit']");
+
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = "সেভ হচ্ছে...";
+  }
+
+  try {
+    const fileInput = document.getElementById("pImage");
+    const file = fileInput?.files?.[0];
+
+    if (!file) {
+      alert("অনুগ্রহ করে একটি ছবি নির্বাচন করুন।");
+      return;
     }
-  });
+
+    console.log('Uploading image to Supabase...', file.name, file.type);
+    const imageUrl = await uploadProductImage(file);
+    console.log('Image uploaded, URL:', imageUrl);
+
+    const productData = {
+      title: document.getElementById("pName")?.value.trim() || "",
+      weight: document.getElementById("pWeight")?.value.trim() || "",
+      price: Number(document.getElementById("pPrice")?.value || 0),
+      location: document.getElementById("pLocation")?.value.trim() || "",
+      sellerName: document.getElementById("pSeller")?.value.trim() || "",
+      category: document.getElementById("pCategory")?.value || "",
+      imageUrl,
+      sellerId: user.uid,
+      createdAt: serverTimestamp()
+    };
+
+    console.log('Saving product to Firestore...', productData);
+    await addDoc(collection(db, "products"), productData);
+
+    alert("পণ্য সফলভাবে যোগ করা হয়েছে!");
+    form.reset();
+    await loadMyProducts(user.uid);
+    switchDashboardView("myProductsView");
+  } catch (error) {
+    console.error("Add product failed:", error);
+    alert(`ইমেজ আপলোড বা ডাটাবেস সংরক্ষণ ব্যর্থ হয়েছে।\n${error?.message || error}`);
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.innerHTML = "পণ্য সেভ করুন <i class=\"fa-solid fa-check\"></i>";
+    }
+  }
+}
+
+// Attach form submission handler
+const addProductForm = document.getElementById("addProductForm");
+if (addProductForm) addProductForm.addEventListener('submit', handleAddProductSubmit);
+
+/* ---------------- LOAD MY PRODUCTS ---------------- */
+
+async function loadMyProducts(uid) {
+  const list = document.getElementById("myProductList");
+  if (!list) return;
+
+  const q = query(
+    collection(db, "products"),
+    where("sellerId", "==", uid)
+  );
+
+  try {
+    const snapshot = await getDocs(q);
+    console.log('Products loaded for user:', uid, 'count:', snapshot.size);
+    resetProductList(list);
+
+    snapshot.forEach((docSnap) => {
+      const card = createProductCard(docSnap);
+      list.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Load my products failed:", error);
+  }
+}
+
+/* ---------------- DELETE PRODUCT ---------------- */
+
+window.deleteProduct = async function (id) {
+  if (!confirm("এই পণ্যটি মুছে ফেলতে চাইছেন?")) return;
+
+  const user = auth.currentUser;
+  if (!user) {
+    alert("অনুগ্রহ করে প্রথমে লগইন করুন।");
+    return;
+  }
+
+  try {
+    const productRef = doc(db, "products", id);
+    const productSnap = await getDoc(productRef);
+
+    if (!productSnap.exists()) {
+      alert("পণ্যটি খুঁজে পাওয়া যায়নি।");
+      return;
+    }
+
+    if (productSnap.data().sellerId !== user.uid) {
+      alert("আপনি এই পণ্যটি মুছতে অনুমোদিত নন।");
+      return;
+    }
+
+    await deleteDoc(productRef);
+    console.log('Product deleted:', id);
+    alert("পণ্য সফলভাবে মুছে ফেলা হয়েছে।");
+    await loadMyProducts(user.uid);
+  } catch (error) {
+    console.error("Delete product failed:", error);
+    alert("পণ্য মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+  }
+};
+
+// Replay any queued calls that occurred before module initialized
+try {
+  if (window._dashboardQueue && window._dashboardQueue.length) {
+    const queued = window._dashboardQueue.slice();
+    window._dashboardQueue.length = 0;
+    queued.forEach((item) => {
+      try {
+        const fn = window[item.name];
+        if (typeof fn === "function") fn.apply(null, item.args);
+      } catch (err) {
+        console.warn("Failed to replay queued dashboard call:", item, err);
+      }
+    });
+  }
+} catch (e) {
+  console.error('replay queue error', e);
+}
+
+// Initialization: attach safe listeners to sidebar links and toggles
+(function initDashboardBindings() {
+  try {
+    const sidebar = document.getElementById("sidebar");
+
+    // Promote menu anchors with inline switchDashboardView(...) to safe listeners
+    if (sidebar) {
+      const links = sidebar.querySelectorAll("a[onclick]");
+      links.forEach((a) => {
+        const onclick = a.getAttribute("onclick") || "";
+        const match = onclick.match(/switchDashboardView\(('|\")([^'\"]+)\1\)/);
+        if (match) {
+          a.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            try {
+              window.switchDashboardView(match[2]);
+            } catch (err) {
+              console.error("switchDashboardView error:", err);
+            }
+          });
+        }
+      });
+    }
+
+    // Menu toggle button (if exists)
+    const menuToggle = document.querySelector('.menu-toggle');
+    if (menuToggle) {
+      menuToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        try { window.toggleSidebar(); } catch (err) { console.error(err); }
+      });
+    }
+
+    // Close button
+    const closeBtn = document.querySelector('.close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        try { window.toggleSidebar(); } catch (err) { console.error(err); }
+      });
+    }
+  } catch (e) {
+    console.error('initDashboardBindings failed', e);
+  }
+})();

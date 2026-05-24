@@ -8,6 +8,68 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Resilient fallback UI handlers so sidebar buttons work even if module fails to load.
+    (function () {
+      window._dashboardQueue = window._dashboardQueue || [];
+
+      function _enqueue(name, args) { window._dashboardQueue.push({ name, args }); }
+
+      // Minimal DOM-only implementations
+      if (!window.switchDashboardView) window.switchDashboardView = function (viewId) {
+        try {
+          const views = document.querySelectorAll('.dashboard-view');
+          views.forEach(v => v.classList.add('hidden-view'));
+          const t = document.getElementById(viewId);
+          if (t) t.classList.remove('hidden-view');
+        } catch (e) { _enqueue('switchDashboardView', [viewId]); }
+      };
+
+      if (!window.toggleSidebar) window.toggleSidebar = function () {
+        try {
+          const sb = document.getElementById('sidebar');
+          if (sb) sb.classList.toggle('active');
+        } catch (e) { _enqueue('toggleSidebar', []); }
+      };
+
+      if (!window.toggleDashboardMode) window.toggleDashboardMode = function () {
+        try {
+          const buyer = document.getElementById('buyerDashboard');
+          const seller = document.getElementById('sellerDashboard');
+          const modeText = document.getElementById('modeText');
+          if (buyer) buyer.classList.toggle('hidden-view');
+          if (seller) seller.classList.toggle('hidden-view');
+          if (modeText && buyer) modeText.textContent = buyer.classList.contains('active-view') ? 'Switch to Selling' : 'Switch to Buying';
+        } catch (e) { _enqueue('toggleDashboardMode', []); }
+      };
+
+      if (!window.logout) window.logout = function (e) {
+        try {
+          e?.preventDefault?.();
+        } catch (e) { }
+        // Best-effort fallback: redirect to auth page
+        window.location.href = 'auth.html';
+      };
+
+      if (!window.closeDeleteModal) window.closeDeleteModal = function () {
+        const modal = document.getElementById('deleteModal'); if (modal) modal.classList.add('hidden-modal');
+      };
+
+      if (!window.deleteProduct) window.deleteProduct = function (id) {
+        // Fallback: remove card from DOM if present
+        try {
+          const btn = document.querySelector(`[data-prod-id="${id}"]`) || null;
+          if (btn) btn.remove();
+          else {
+            // try to find by button onclick attr
+            const b = document.querySelector(`button[onclick*="${id}"]`);
+            if (b) b.closest('.product-card')?.remove();
+          }
+        } catch (e) { _enqueue('deleteProduct', [id]); }
+      };
+
+    })();
+  </script>
 </head>
 
 <body>
@@ -51,7 +113,8 @@
       </ul>
 
       <div class="sidebar-footer">
-        <a href="auth.html" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> লগআউট</a>
+        <a href="#" class="logout-btn" onclick="logout(event)"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+          লগআউট</a>
       </div>
     </aside>
 
@@ -295,7 +358,7 @@
     </div>
   </div>
 
-  <script src="js/dashboard.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 
 </html>
