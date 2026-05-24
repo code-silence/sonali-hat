@@ -1,15 +1,45 @@
 
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 
 import {
   collection,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
 const grid = document.getElementById("productGrid");
 const noResults = document.querySelector(".no-results");
 const categoryFilter = document.getElementById("category-filter");
 let latestSnapshot = null;
+
+const loginLink = document.getElementById("loginLink");
+const logoutBtn = document.getElementById("logoutBtn");
+
+async function handleLogout(event) {
+  event?.preventDefault();
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+  window.location.href = "auth.html";
+}
+
+window.logout = handleLogout;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    if (loginLink) loginLink.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-flex";
+  } else {
+    if (loginLink) loginLink.style.display = "inline-flex";
+    if (logoutBtn) logoutBtn.style.display = "none";
+  }
+});
 
 function renderProducts(snapshot) {
   grid.innerHTML = "";
