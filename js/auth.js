@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
-  onAuthStateChanged
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 import {
@@ -44,22 +44,6 @@ function togglePassword(icon) {
 window.switchForm = switchForm;
 window.togglePassword = togglePassword;
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
-
-  try {
-    const userSnap = await getDoc(doc(db, "users", user.uid));
-    const role = userSnap.exists() ? userSnap.data().role : "buyer";
-    if (role === "seller") {
-      window.location.href = "dashboard.html";
-      return;
-    }
-    window.location.href = "index.html";
-  } catch (error) {
-    console.error("Auth state redirect error:", error);
-  }
-});
-
 /* ---------------- FORM ELEMENTS ---------------- */
 
 const loginForm = document.getElementById("loginFormElement");
@@ -89,7 +73,8 @@ signupForm?.addEventListener("submit", async (e) => {
       createdAt: Date.now()
     });
 
-    alert("Registration successful!");
+    await signOut(auth);
+    alert("Registration successful! আপনার ইমেইল এবং পাসওয়ার্ড দিয়ে লগইন করুন।");
     switchForm("loginForm");
 
   } catch (err) {
