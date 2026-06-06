@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: #f4f7f5;
+  background: linear-gradient(135deg, #f0f8f5 0%, #f4f7f5 50%, #f9fafb 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,14 +23,16 @@ body {
    2. মূল অথেনটিকেশন কন্টেইনার (সাদা বক্স)
 ========================================= */
 .auth-container {
-  background-color: #ffffff;
+  background: white;
   width: 100%;
-  max-width: 1000px;
-  height: 650px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(27, 67, 50, 0.1);
+  max-width: 1100px;
+  height: auto;
+  min-height: 680px;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(27, 67, 50, 0.15);
   display: flex;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 /* =========================================
@@ -38,39 +40,71 @@ body {
 ========================================= */
 .auth-sidebar {
   flex: 1;
-  /* ব্যাকগ্রাউন্ডে ছবি ও গ্রেডিয়েন্ট কালার */
   background:
-    linear-gradient(135deg, rgba(27, 67, 50, 0.9), rgba(45, 106, 79, 0.85)),
+    linear-gradient(135deg, rgba(27, 67, 50, 0.95), rgba(45, 106, 79, 0.9)),
     url("https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=1000")
       no-repeat center center/cover;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 50px 40px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 183, 3, 0.1), transparent);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.auth-sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  left: -50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 183, 3, 0.08), transparent);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
 }
 
 .sidebar-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: 2.8rem;
+  margin-bottom: 24px;
   font-weight: 700;
   color: #ffb703;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar-content p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  opacity: 0.9;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  opacity: 0.95;
+  position: relative;
+  z-index: 1;
 }
 
 /* সাইডবারের ভাসমান আইকন অ্যানিমেশন */
 .field-icon {
-  margin-top: 30px;
-  font-size: 4rem;
+  margin-top: 35px;
+  font-size: 5rem;
   color: #ffb703;
   animation: float 3s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
 @keyframes float {
@@ -102,15 +136,17 @@ body {
 }
 
 .form-header h3 {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #1b4332;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
 .form-header p {
   color: #6c757d;
   font-size: 0.95rem;
-  margin-bottom: 25px;
+  margin-bottom: 28px;
+  line-height: 1.5;
 }
 
 /* ফর্ম হাইড এবং শো করার ক্লাস ও অ্যানিমেশন */
@@ -154,15 +190,17 @@ body {
 
 .role-content {
   border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 16px;
+  padding: 16px 14px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   color: #4a5568;
+  background: linear-gradient(135deg, #ffffff, #fafbf9);
+  cursor: pointer;
 }
 
 .role-content i {
@@ -176,9 +214,10 @@ body {
 /* যখন রোল সিলেক্ট করা হবে তখনকার ডিজাইন */
 .role-card input[type="radio"]:checked + .role-content {
   border-color: #2d6a4f;
-  background-color: rgba(45, 106, 79, 0.08);
+  background: linear-gradient(135deg, #e8f5e9, #d4edda);
   color: #2d6a4f;
-  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.15);
+  box-shadow: 0 8px 24px rgba(45, 106, 79, 0.25);
+  transform: translateY(-4px);
 }
 
 /* =========================================
@@ -200,19 +239,25 @@ body {
 
 .input-group input {
   width: 100%;
-  padding: 12px 45px 12px 45px;
-  border: 1px solid #dcdde1;
-  border-radius: 10px;
+  padding: 14px 45px 14px 45px;
+  border: 2px solid #e8f0ec;
+  border-radius: 12px;
   font-size: 0.95rem;
   outline: none;
-  transition: all 0.3s ease;
-  background-color: #fafafa;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #fafbf9;
+  font-family: "Hind Siliguri", sans-serif;
 }
 
 .input-group input:focus {
   border-color: #2d6a4f;
   background-color: #ffffff;
-  box-shadow: 0 0 8px rgba(45, 106, 79, 0.2);
+  box-shadow: 0 0 0 5px rgba(45, 106, 79, 0.1);
+  transform: translateY(-2px);
+}
+
+.input-group input:hover {
+  border-color: #d1e7d3;
 }
 
 .input-group input:focus ~ .input-icon {
@@ -248,8 +293,9 @@ body {
   color: #ffb703;
   text-decoration: none;
   font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.3s;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .forgot-pass-link a:hover {
@@ -258,25 +304,28 @@ body {
 
 .btn-submit {
   width: 100%;
-  padding: 13px;
+  padding: 14px;
   background: linear-gradient(135deg, #2d6a4f, #1b4332);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2);
+  box-shadow: 0 8px 20px rgba(27, 67, 50, 0.25);
 }
 
 .btn-submit:hover {
-  background: linear-gradient(135deg, #1b4332, #2d6a4f);
-  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(27, 67, 50, 0.35);
+}
+
+.btn-submit:active {
   transform: translateY(-1px);
 }
 

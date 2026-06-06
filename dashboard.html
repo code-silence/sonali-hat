@@ -270,51 +270,70 @@
             নতুন পণ্য যোগ করুন
           </h3>
           <form id="addProductForm" class="add-product-form">
-            <div class="input-grid">
-              <input type="text" id="pName" placeholder="পণ্যের নাম (যেমন: লাল আলু)" required />
-              <input type="text" id="pWeight" placeholder="ওজন/প্যাকেজ (যেমন: ৫ কেজি)" required />
-              <input type="number" id="pPrice" placeholder="মূল্য (৳)" required />
-              <input type="text" id="pLocation" placeholder="লোকেশন (যেমন: শিবগঞ্জ, বগুড়া)" required />
-              <input type="text" id="pSeller" placeholder="কৃষকের নাম" required />
-
-              <div style="display: flex; flex-direction: column; gap: 5px">
-                <label for="pCategory" style="font-size: 0.9rem; color: #6c757d; font-weight: 500">
-                  ক্যাটেগরি
+            <div class="product-form-grid">
+              <div class="form-fields">
+                <label>
+                  <span>পণ্যের নাম</span>
+                  <input type="text" id="pName" placeholder="পণ্যের নাম (যেমন: লাল আলু)" required />
                 </label>
-                <select id="pCategory" required
-                  style="padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 10px; background: white; color: #1f2937;">
-                  <option value="" disabled selected>ক্যাটেগরি বাছুন</option>
-                  <option value="সবজি">সবজি</option>
-                  <option value="ফল">ফল</option>
-                  <option value="শস্য">শস্য</option>
-                  <option value="মসলা">মসলা</option>
-                  <option value="দুধজাত">দুধজাত</option>
-                </select>
+
+                <label class="full-width">
+                  <span>পণ্যের বর্ণনা</span>
+                  <textarea id="pDescription" rows="4" placeholder="পণ্যের বর্ণনা লিখুন" required></textarea>
+                </label>
+
+                <label>
+                  <span>মূল্য (৳)</span>
+                  <input type="number" id="pPrice" placeholder="মূল্য (৳)" required />
+                </label>
+
+                <label>
+                  <span>লোকেশন</span>
+                  <input type="text" id="pLocation" placeholder="লোকেশন (যেমন: শিবগঞ্জ, বগুড়া)" required />
+                </label>
+
+                <label>
+                  <span>কৃষকের নাম</span>
+                  <input type="text" id="pSeller" placeholder="কৃষকের নাম" required />
+                </label>
+
+                <label>
+                  <span>ক্যাটেগরি</span>
+                  <select id="pCategory" required>
+                    <option value="" disabled selected>ক্যাটেগরি বাছুন</option>
+                    <option value="সবজি">সবজি</option>
+                    <option value="ফল">ফল</option>
+                    <option value="শস্য">শস্য</option>
+                    <option value="মসলা">মসলা</option>
+                    <option value="দুধজাত">দুধজাত</option>
+                  </select>
+                </label>
+
+                <label class="full-width">
+                  <span>পণ্যের ছবি</span>
+                  <input type="file" id="pImage" accept="image/*" required />
+                </label>
               </div>
 
-              <div style="display: flex; flex-direction: column; gap: 5px">
-                <label for="pImage" style="font-size: 0.9rem; color: #6c757d; font-weight: 500">
-                  পণ্যের ছবি নির্বাচন করুন:
-                </label>
-                <input type="file" id="pImage" accept="image/*" required style="padding: 9px 15px" />
+              <div class="preview-panel">
+                <div class="image-preview" id="imagePreview">
+                  <img id="previewImage" alt="প্রিভিউ ইমেজ" />
+                  <div class="preview-placeholder" id="previewPlaceholder">
+                    <i class="fa-solid fa-image"></i>
+                    <span>এখানে ছবি প্রিভিউ দেখুন</span>
+                  </div>
+                </div>
+
+                <p class="preview-note">
+                  ছবিটি নির্বাচন করলে অল্প সময়ে এখানে প্রিভিউ দেখাবে। উচ্চ মানের ছবি দিন, তবে ৫ এমবি-এর বেশি নয়।
+                </p>
               </div>
             </div>
 
-            <div style="text-align: center; margin-top: 30px">
-              <button type="submit" class="btn-submit" style="
-                    width: auto;
-                    padding: 12px 40px;
-                    background: #2d6a4f;
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    font-size: 1rem;
-                    transition: 0.3s;
-                    box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
-                  ">
-                পণ্য সেভ করুন <i class="fa-solid fa-check"></i>
+            <div class="form-actions">
+              <button type="submit" class="btn-submit">
+                <span class="button-text">পণ্য সেভ করুন</span>
+                <i class="fa-solid fa-check"></i>
               </button>
             </div>
           </form>

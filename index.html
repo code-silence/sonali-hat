@@ -62,7 +62,7 @@
       <h2><i class="fa-solid fa-leaf"></i> সদ্য যুক্ত হওয়া পণ্য</h2>
     </div>
 
-    <!-- FILTER (still UI only for now) -->
+    <!-- FILTER AND SORT -->
     <div class="product-filters">
       <div class="filter-group">
         <label>ক্যাটেগরি</label>
@@ -75,6 +75,20 @@
           <option value="দুধজাত">দুধজাত</option>
         </select>
       </div>
+      <div class="filter-group">
+        <label>মূল্য সাজান</label>
+        <select id="price-sort">
+          <option value="none">সাজানোর প্রয়োজন নেই</option>
+          <option value="asc">কম থেকে বেশি</option>
+          <option value="desc">বেশি থেকে কম</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div class="product-loader" id="productLoader">
+      <div class="spinner"></div>
+      <p>পণ্য লোড হচ্ছে...</p>
     </div>
 
     <!-- 🔥 FIREBASE PRODUCT GRID -->

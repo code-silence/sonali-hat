@@ -14,6 +14,7 @@ import {
   query,
   where,
   deleteDoc,
+  updateDoc,
   doc,
   getDoc,
   serverTimestamp
@@ -74,6 +75,7 @@ window.toggleDashboardMode = function () {
 };
 
 window.closeDeleteModal = function () {
+  pendingDeleteProductId = null;
   const modal = document.getElementById("deleteModal");
   if (modal) modal.classList.add("hidden-modal");
 };
@@ -152,13 +154,20 @@ function createProductCard(docSnap) {
   categoryTag.textContent = p.category || '';
 
   const title = document.createElement('h3');
-  title.textContent = p.title || '';
+  title.textContent = p.name || p.title || '';
 
   const weight = document.createElement('p');
   weight.textContent = p.weight || '';
 
   const location = document.createElement('p');
   location.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${p.location || ''}`;
+
+  if (p.description) {
+    const descriptionText = document.createElement('p');
+    descriptionText.className = 'product-description';
+    descriptionText.textContent = p.description;
+    details.append(descriptionText);
+  }
 
   const priceAction = document.createElement('div');
   priceAction.className = 'price-action';
@@ -167,13 +176,19 @@ function createProductCard(docSnap) {
   price.className = 'price';
   price.textContent = `৳ ${p.price ?? '0'}`;
 
+  const editButton = document.createElement('button');
+  editButton.type = 'button';
+  editButton.className = 'edit-product-btn';
+  editButton.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
+  editButton.addEventListener('click', () => editProduct(docSnap));
+
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
   deleteButton.className = 'delete-product-btn';
   deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
-  deleteButton.addEventListener('click', () => deleteProduct(docSnap.id));
+  deleteButton.addEventListener('click', () => window.deleteProduct(docSnap.id));
 
-  priceAction.append(price, deleteButton);
+  priceAction.append(price, editButton, deleteButton);
   details.append(categoryTag, title, weight, location, priceAction);
   card.append(details);
 
@@ -184,6 +199,208 @@ function resetProductList(list) {
   list.replaceChildren();
 }
 
+let pendingDeleteProductId = null;
+let editingProductId = null;
+let currentPreviewUrl = null;
+
+const imageInput = document.getElementById("pImage");
+const previewImage = document.getElementById("previewImage");
+const previewPlaceholder = document.getElementById("previewPlaceholder");
+const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+function updateImagePreview(fileOrUrl) {
+  if (!previewImage || !previewPlaceholder) return;
+
+  if (currentPreviewUrl) {
+    URL.revokeObjectURL(currentPreviewUrl);
+    currentPreviewUrl = null;
+  }
+
+  if (!fileOrUrl) {
+    previewImage.src = "";
+    previewImage.style.display = "none";
+    previewPlaceholder.style.display = "flex";
+    return;
+  }
+
+  if (fileOrUrl instanceof File) {
+    currentPreviewUrl = URL.createObjectURL(fileOrUrl);
+    previewImage.src = currentPreviewUrl;
+  } else {
+    previewImage.src = fileOrUrl;
+  }
+
+  previewImage.style.display = "block";
+  previewPlaceholder.style.display = "none";
+}
+
+function setProductFormMode(editing) {
+  const header = document.querySelector('#addProductView .welcome-text');
+  const submitButton = document.querySelector('#addProductForm button[type="submit"]');
+
+  if (editing) {
+    if (header) header.textContent = 'পণ্য আপডেট করুন';
+    if (submitButton) {
+      submitButton.innerHTML = `
+        <span class="button-text">আপডেট করুন</span>
+        <i class="fa-solid fa-check"></i>
+      `;
+    }
+  } else {
+    if (header) header.textContent = 'নতুন পণ্য যোগ করুন';
+    if (submitButton) {
+      submitButton.innerHTML = `
+        <span class="button-text">পণ্য সেভ করুন</span>
+        <i class="fa-solid fa-check"></i>
+      `;
+    }
+  }
+}
+
+function editProduct(docSnap) {
+  const p = docSnap.data() || {};
+  editingProductId = docSnap.id;
+
+  const form = document.getElementById('addProductForm');
+  if (!form) return;
+
+  form.querySelector('#pName').value = p.name || p.title || '';
+  form.querySelector('#pDescription').value = p.description || '';
+  form.querySelector('#pPrice').value = p.price || '';
+  form.querySelector('#pCategory').value = p.category || '';
+  form.querySelector('#pLocation').value = p.location || '';
+  form.querySelector('#pSeller').value = p.sellerName || '';
+
+  if (imageInput) imageInput.value = '';
+  updateImagePreview(p.imageUrl || null);
+
+  switchDashboardView('addProductView');
+  setProductFormMode(true);
+}
+
+function clearProductForm() {
+  const form = document.getElementById('addProductForm');
+  if (form) form.reset();
+  updateImagePreview(null);
+  editingProductId = null;
+  setProductFormMode(false);
+}
+
+function showDeleteModal(productId) {
+  pendingDeleteProductId = productId;
+  const modal = document.getElementById("deleteModal");
+  if (modal) modal.classList.remove("hidden-modal");
+}
+
+async function performDeleteProduct() {
+  if (!pendingDeleteProductId) return;
+  const productId = pendingDeleteProductId;
+  pendingDeleteProductId = null;
+  window.closeDeleteModal();
+
+  const confirmButton = document.getElementById("confirmDeleteBtn");
+  if (confirmButton) confirmButton.disabled = true;
+
+  const user = auth.currentUser;
+  if (!user) {
+    if (confirmButton) confirmButton.disabled = false;
+    showToast("লগইন প্রয়োজন", "অনুগ্রহ করে প্রথমে লগইন করুন।", "error");
+    return;
+  }
+
+  try {
+    const productRef = doc(db, "products", productId);
+    const productSnap = await getDoc(productRef);
+
+    if (!productSnap.exists()) {
+      showToast("পণ্য মিললো না", "এই পণ্যটি আর পাওয়া যাচ্ছে না।", "error");
+      return;
+    }
+
+    if (productSnap.data().sellerId !== user.uid) {
+      showToast("অনুমোদিত নেই", "আপনি এই পণ্যটি মুছতে পারবেন না।", "error");
+      return;
+    }
+
+    await deleteDoc(productRef);
+
+    const card = document.querySelector(`[data-prod-id="${productId}"]`);
+    if (card) card.remove();
+
+    showToast("পণ্য মুছে ফেলা হয়েছে", "আপনার পণ্য তালিকা থেকে সরানো হয়েছে।");
+    await loadMyProducts(user.uid);
+  } catch (error) {
+    console.error("Delete product failed:", error);
+    showToast("মুছতে ব্যর্থ", "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।", "error");
+  } finally {
+    if (confirmButton) confirmButton.disabled = false;
+  }
+}
+
+if (imageInput) {
+  imageInput.addEventListener("change", (event) => {
+    const file = event.target?.files?.[0];
+
+    if (!file) {
+      updateImagePreview(null);
+      return;
+    }
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      showToast(
+        "অবৈধ ফাইল ফরম্যাট",
+        "শুধুমাত্র JPG, PNG বা WebP ছবি গ্রহণযোগ্য।",
+        "error"
+      );
+      imageInput.value = '';
+      updateImagePreview(null);
+      return;
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      showToast(
+        "ফাইল খুব বড়",
+        "ছবির আকার ৫ এমবি-এর কম হওয়া উচিত।",
+        "error"
+      );
+      imageInput.value = '';
+      updateImagePreview(null);
+      return;
+    }
+
+    updateImagePreview(file);
+  });
+}
+
+if (confirmDeleteBtn) {
+  confirmDeleteBtn.addEventListener("click", performDeleteProduct);
+}
+
+function showToast(title, message, type = 'success') {
+  const toast = document.getElementById('dynamicToast');
+  const toastTitle = document.getElementById('toastTitle');
+  const toastText = document.getElementById('toastText');
+  if (!toast || !toastTitle || !toastText) return;
+
+  toastTitle.textContent = title;
+  toastText.textContent = message;
+  toast.classList.remove('info', 'error');
+  toast.classList.add(type === 'error' ? 'error' : 'show');
+  if (type === 'error') {
+    toast.classList.add('error');
+  }
+
+  toast.classList.add('show');
+  window.clearTimeout(showToast._timeout);
+  showToast._timeout = window.setTimeout(() => {
+    toast.classList.remove('show', 'error');
+  }, 3500);
+}
+
 async function handleAddProductSubmit(e) {
   e.preventDefault();
 
@@ -192,56 +409,82 @@ async function handleAddProductSubmit(e) {
 
   const user = auth.currentUser;
   if (!user) {
-    alert("অনুগ্রহ করে প্রথমে লগইন করুন।");
+    showToast("লগইন প্রয়োজন", "অনুগ্রহ করে প্রথমে লগইন করুন।", "error");
     return;
   }
 
   const submitButton = form.querySelector("button[type='submit']");
+  const fileInput = document.getElementById("pImage");
+  const file = fileInput?.files?.[0];
+  const isEditing = Boolean(editingProductId);
+
+  if (!file && !isEditing) {
+    showToast("ছবি নেই", "অনুগ্রহ করে একটি ছবি নির্বাচন করুন।", "error");
+    return;
+  }
 
   if (submitButton) {
     submitButton.disabled = true;
-    submitButton.textContent = "সেভ হচ্ছে...";
+    submitButton.innerHTML = `
+      <span class="button-text">সেভ হচ্ছে...</span>
+      <span class="button-spinner"></span>
+    `;
   }
 
   try {
-    const fileInput = document.getElementById("pImage");
-    const file = fileInput?.files?.[0];
+    const productName = form.querySelector("#pName")?.value.trim() || "";
+    const productDescription = form.querySelector("#pDescription")?.value.trim() || "";
+    const productPrice = Number(form.querySelector("#pPrice")?.value || 0);
 
-    if (!file) {
-      alert("অনুগ্রহ করে একটি ছবি নির্বাচন করুন।");
-      return;
+    if (isEditing) {
+      const updateData = {
+        name: productName,
+        price: productPrice,
+        description: productDescription
+      };
+
+      if (file) {
+        console.log('Uploading image to Supabase...', file.name, file.type);
+        const imageUrl = await uploadProductImage(file);
+        updateData.imageUrl = imageUrl;
+      }
+
+      const productRef = doc(db, "products", editingProductId);
+      await updateDoc(productRef, updateData);
+      showToast("পণ্য আপডেট করা হয়েছে", "আপনার পণ্য সফলভাবে হালনাগাদ হয়েছে।");
+    } else {
+      console.log('Uploading image to Supabase...', file.name, file.type);
+      const imageUrl = await uploadProductImage(file);
+
+      const productData = {
+        name: productName,
+        price: productPrice,
+        description: productDescription,
+        imageUrl,
+        sellerId: user.uid,
+        createdAt: serverTimestamp()
+      };
+
+      const categoryValue = form.querySelector("#pCategory")?.value;
+      if (categoryValue) {
+        productData.category = categoryValue;
+      }
+
+      console.log('Saving product to Firestore...', productData);
+      await addDoc(collection(db, "products"), productData);
+      showToast("পণ্য সফলভাবে যোগ করা হয়েছে", "আপনার পণ্য এখন তালিকাভুক্ত হয়েছে।");
     }
 
-    console.log('Uploading image to Supabase...', file.name, file.type);
-    const imageUrl = await uploadProductImage(file);
-    console.log('Image uploaded, URL:', imageUrl);
-
-    const productData = {
-      title: document.getElementById("pName")?.value.trim() || "",
-      weight: document.getElementById("pWeight")?.value.trim() || "",
-      price: Number(document.getElementById("pPrice")?.value || 0),
-      location: document.getElementById("pLocation")?.value.trim() || "",
-      sellerName: document.getElementById("pSeller")?.value.trim() || "",
-      category: document.getElementById("pCategory")?.value || "",
-      imageUrl,
-      sellerId: user.uid,
-      createdAt: serverTimestamp()
-    };
-
-    console.log('Saving product to Firestore...', productData);
-    await addDoc(collection(db, "products"), productData);
-
-    alert("পণ্য সফলভাবে যোগ করা হয়েছে!");
-    form.reset();
+    clearProductForm();
     await loadMyProducts(user.uid);
     switchDashboardView("myProductsView");
   } catch (error) {
     console.error("Add product failed:", error);
-    alert(`ইমেজ আপলোড বা ডাটাবেস সংরক্ষণ ব্যর্থ হয়েছে।\n${error?.message || error}`);
+    showToast("সংরক্ষণ ব্যর্থ", `ইমেজ আপলোড বা ডাটাবেস সমস্যার কারণে ব্যর্থ হয়েছে।`, "error");
   } finally {
     if (submitButton) {
       submitButton.disabled = false;
-      submitButton.innerHTML = "পণ্য সেভ করুন <i class=\"fa-solid fa-check\"></i>";
+      setProductFormMode(Boolean(editingProductId));
     }
   }
 }
@@ -277,37 +520,8 @@ async function loadMyProducts(uid) {
 
 /* ---------------- DELETE PRODUCT ---------------- */
 
-window.deleteProduct = async function (id) {
-  if (!confirm("এই পণ্যটি মুছে ফেলতে চাইছেন?")) return;
-
-  const user = auth.currentUser;
-  if (!user) {
-    alert("অনুগ্রহ করে প্রথমে লগইন করুন।");
-    return;
-  }
-
-  try {
-    const productRef = doc(db, "products", id);
-    const productSnap = await getDoc(productRef);
-
-    if (!productSnap.exists()) {
-      alert("পণ্যটি খুঁজে পাওয়া যায়নি।");
-      return;
-    }
-
-    if (productSnap.data().sellerId !== user.uid) {
-      alert("আপনি এই পণ্যটি মুছতে অনুমোদিত নন।");
-      return;
-    }
-
-    await deleteDoc(productRef);
-    console.log('Product deleted:', id);
-    alert("পণ্য সফলভাবে মুছে ফেলা হয়েছে।");
-    await loadMyProducts(user.uid);
-  } catch (error) {
-    console.error("Delete product failed:", error);
-    alert("পণ্য মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-  }
+window.deleteProduct = function (id) {
+  showDeleteModal(id);
 };
 
 // Replay any queued calls that occurred before module initialized
