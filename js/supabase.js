@@ -48,3 +48,46 @@ export async function uploadProductImage(file) {
 
     return publicData.publicUrl;
 }
+
+function parseSupabasePublicUrl(publicUrl) {
+    if (!publicUrl) {
+        throw new Error("No public URL provided for storage deletion.");
+    }
+
+    const url = new URL(publicUrl);
+    const storagePrefix = "/storage/v1/object/public/";
+    const pathIndex = url.pathname.indexOf(storagePrefix);
+
+    if (pathIndex === -1) {
+        throw new Error("Invalid Supabase public URL format.");
+    }
+
+    const afterPublic = url.pathname.slice(pathIndex + storagePrefix.length);
+    const segments = afterPublic.split("/");
+
+    if (segments.length < 2) {
+        throw new Error("Unable to parse bucket and file path from public URL.");
+    }
+
+    const bucket = segments.shift();
+    const filePath = decodeURIComponent(segments.join("/"));
+
+    if (!bucket || !filePath) {
+        throw new Error("Invalid parsed storage bucket or file path.");
+    }
+
+    return { bucket, filePath };
+}
+
+export async function deleteProductImage(publicUrl) {
+    const { bucket, filePath } = parseSupabasePublicUrl(publicUrl);
+
+    const { data, error } = await supabase.storage.from(bucket).remove([filePath]);
+
+    if (error) {
+        console.error("Supabase storage remove error:", error);
+        throw new Error(error.message || "Failed to delete image from Supabase storage.");
+    }
+
+    return data;
+}

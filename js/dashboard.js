@@ -1,6 +1,6 @@
 
 import { auth, db } from "./firebase.js";
-import { uploadProductImage } from "./supabase.js";
+import { uploadProductImage, deleteProductImage } from "./supabase.js";
 
 import {
   onAuthStateChanged,
@@ -298,6 +298,17 @@ window.deleteProduct = async function (id) {
     if (productSnap.data().sellerId !== user.uid) {
       alert("আপনি এই পণ্যটি মুছতে অনুমোদিত নন।");
       return;
+    }
+
+    const imageUrl = productSnap.data().imageUrl;
+    if (imageUrl) {
+      try {
+        await deleteProductImage(imageUrl);
+      } catch (storageError) {
+        console.error("Failed to remove product image from Supabase:", storageError);
+        alert("মিডিয়া ফাইল মোছতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।");
+        return;
+      }
     }
 
     await deleteDoc(productRef);
