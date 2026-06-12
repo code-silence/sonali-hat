@@ -51,7 +51,9 @@ function handleLogin(event) {
 
   if (!window.firebaseAuth || !window.firebaseSignInWithEmailAndPassword) {
     console.error("Firebase Auth is not initialized.");
-    showMessage("ফায়ারবেস লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।");
+    showMessage(
+      "ফায়ারবেস লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।",
+    );
     return;
   }
 
@@ -63,7 +65,8 @@ function handleLogin(event) {
     return;
   }
 
-  window.firebaseSignInWithEmailAndPassword(window.firebaseAuth, email, password)
+  window
+    .firebaseSignInWithEmailAndPassword(window.firebaseAuth, email, password)
     .then(() => {
       showMessage("সফলভাবে লগইন হয়েছে।");
       window.location.href = "dashboard.html";
@@ -80,21 +83,29 @@ function handleSignup(event) {
 
   if (!window.firebaseAuth || !window.firebaseCreateUserWithEmailAndPassword) {
     console.error("Firebase Auth is not initialized.");
-    showMessage("ফায়ারবেস লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।");
+    showMessage(
+      "ফায়ারবেস লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।",
+    );
     return;
   }
 
   const name = signupName.value.trim();
   const email = signupEmail.value.trim();
   const password = signupPassword.value.trim();
-  const role = document.querySelector('input[name="userRole"]:checked')?.value || "buyer";
+  const role =
+    document.querySelector('input[name="userRole"]:checked')?.value || "buyer";
 
   if (!name || !email || !password) {
     showMessage("দয়া করে নাম, ইমেইল ও পাসওয়ার্ড পূরণ করুন।");
     return;
   }
 
-  window.firebaseCreateUserWithEmailAndPassword(window.firebaseAuth, email, password)
+  window
+    .firebaseCreateUserWithEmailAndPassword(
+      window.firebaseAuth,
+      email,
+      password,
+    )
     .then(() => {
       showMessage(`রেজিস্ট্রেশন সম্পন্ন হয়েছে। আপনার ভূমিকা: ${role}`);
       signupForm.reset();
@@ -112,7 +123,9 @@ function handleReset(event) {
 
   if (!window.firebaseAuth || !window.firebaseSendPasswordResetEmail) {
     console.error("Firebase Auth is not initialized.");
-    showMessage("ফায়ারবেস লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।");
+    showMessage(
+      "ফায়ারবেস লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।",
+    );
     return;
   }
 
@@ -122,7 +135,8 @@ function handleReset(event) {
     return;
   }
 
-  window.firebaseSendPasswordResetEmail(window.firebaseAuth, email)
+  window
+    .firebaseSendPasswordResetEmail(window.firebaseAuth, email)
     .then(() => {
       showMessage("পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে।");
       forgotForm.reset();

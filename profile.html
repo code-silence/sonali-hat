@@ -354,6 +354,53 @@
           </div>
         </div>
       </main>
+      <!-- Profile Slide Drawer -->
+      <div
+        id="drawerOverlay"
+        class="drawer-overlay"
+        onclick="closeProfileDrawer()"
+      ></div>
+      <div id="profileDrawer" class="profile-drawer">
+        <div class="drawer-header">
+          <h3>আমার প্রোফাইল</h3>
+          <button onclick="closeProfileDrawer()" class="close-drawer-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-avatar-section">
+            <img
+              src="https://ui-avatars.com/api/?name=User"
+              id="drawerAvatar"
+              alt="User Avatar"
+            />
+            <h4 id="drawerName">নাম লোড হচ্ছে...</h4>
+            <p id="drawerRole" class="drawer-role">---</p>
+          </div>
+          <div class="drawer-info-list">
+            <div class="info-item">
+              <i class="fa-solid fa-envelope"></i>
+              <span id="drawerEmail">---</span>
+            </div>
+            <div class="info-item">
+              <i class="fa-solid fa-phone"></i>
+              <span id="drawerPhone">---</span>
+            </div>
+            <div class="info-item">
+              <i class="fa-solid fa-location-dot"></i>
+              <span id="drawerAddress">---</span>
+            </div>
+            <div class="info-item bkash-info">
+              <i class="fa-solid fa-wallet"></i> বিকাশ:
+              <span id="drawerBkash">---</span>
+            </div>
+            <div class="info-item nagad-info">
+              <i class="fa-solid fa-wallet"></i> নগদ:
+              <span id="drawerNagad">---</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="dynamicToast" class="toast-notification">
@@ -364,6 +411,67 @@
       </div>
     </div>
 
+    <!-- Firebase SDK Setup -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+      import {
+        getStorage,
+        ref,
+        uploadBytes,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyD8BPLnOXBYW7QS-a3qg5lSViHM40uMS98",
+        authDomain: "sonali-hat-1c603.firebaseapp.com",
+        projectId: "sonali-hat-1c603",
+        storageBucket: "sonali-hat-1c603.firebasestorage.app",
+        messagingSenderId: "255090110243",
+        appId: "1:255090110243:web:9203cb506d69b6a5762696",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const storage = getStorage(app);
+
+      // অন্য সব ফাইল থেকে অ্যাক্সেস করার জন্য গ্লোবাল ভেরিয়েবল
+      window.firebaseAuth = auth;
+      window.firebaseDb = db;
+      window.firebaseDoc = doc;
+      window.firebaseSetDoc = setDoc;
+      window.firebaseGetDoc = getDoc; // ডেটা রিড করার জন্য এটি অত্যন্ত জরুরি!
+
+      window.firebaseStorage = storage;
+      window.firebaseRef = ref;
+      window.firebaseUploadBytes = uploadBytes;
+      window.firebaseGetDownloadURL = getDownloadURL;
+
+      // ইউজার লগইন অবস্থায় থাকলে পেজ লোড হতেই ডেটা অটো-ফেচ হবে
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log("User logged in:", user.uid);
+          // profile.js ফাইল লোড হওয়ার পর এই ফাংশনটি অটোমেটিক রান করবে
+          if (typeof loadLatestUserData === "function") {
+            loadLatestUserData();
+          }
+        } else {
+          window.location.href = "auth.html";
+        }
+      });
+    </script>
+
+    <!-- আপনার বর্তমান স্ক্রিপ্টগুলো এর নিচে থাকবে -->
     <script src="js/profile.js"></script>
     <script src="js/dashboard.js"></script>
   </body>

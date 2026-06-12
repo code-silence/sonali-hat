@@ -283,7 +283,27 @@
                   />
                 </div>
               </div>
-
+              <div
+                style="
+                  grid-column: 1 / -1;
+                  margin-top: 10px;
+                  margin-bottom: 10px;
+                "
+              >
+                <textarea
+                  id="pDescription"
+                  placeholder="পণ্যের বিস্তারিত বিবরণ (ঐচ্ছিক - চাইলে দিতে পারেন, না দিলেও সমস্যা নেই)"
+                  rows="2"
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 5px;
+                    font-family: inherit;
+                    resize: vertical;
+                  "
+                ></textarea>
+              </div>
               <div style="text-align: center; margin-top: 30px">
                 <button
                   type="submit"
@@ -349,6 +369,59 @@
         </div>
       </div>
     </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      // এখানে setDoc অ্যাড করা হয়েছে
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        query,
+        where,
+        deleteDoc,
+        doc,
+        setDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyD8BPLnOXBYW7QS-a3qg5lSViHM40uMS98",
+        authDomain: "sonali-hat-1c603.firebaseapp.com",
+        projectId: "sonali-hat-1c603",
+        storageBucket: "sonali-hat-1c603.firebasestorage.app",
+        messagingSenderId: "255090110243",
+        appId: "1:255090110243:web:9203cb506d69b6a5762696",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      window.firebaseAuth = auth;
+      window.firebaseDb = db;
+      window.firebaseCollection = collection;
+      window.firebaseAddDoc = addDoc;
+      window.firebaseGetDocs = getDocs;
+      window.firebaseQuery = query;
+      window.firebaseWhere = where;
+      window.firebaseDeleteDoc = deleteDoc;
+      window.firebaseDoc = doc;
+      window.firebaseSetDoc = setDoc; // ডেটা আপডেটের জন্য এটি যুক্ত করা হলো
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          window.location.href = "auth.html";
+        } else {
+          if (typeof loadMyProducts === "function") {
+            loadMyProducts();
+          }
+        }
+      });
+    </script>
 
     <script src="js/dashboard.js"></script>
   </body>

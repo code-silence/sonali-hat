@@ -174,35 +174,6 @@
         </div>
       </div>
     </div>
-    <script type="module">
-      // Firebase configuration and initialization for auth actions.
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-      import {
-        getAuth,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-        sendPasswordResetEmail,
-      } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-
-      const firebaseConfig = {
-        apiKey: "AIzaSyDduU3_gEc-a2lAdzNARc-McOHmwQSRxYY",
-        authDomain: "sonali-hat.firebaseapp.com",
-        projectId: "sonali-hat",
-        storageBucket: "sonali-hat.firebasestorage.app",
-        messagingSenderId: "173273844485",
-        appId: "1:173273844485:web:95d1f2f48e839b4e1fc56c",
-        measurementId: "G-G1S5MYBT1S",
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-
-      window.firebaseAuth = auth;
-      window.firebaseSignInWithEmailAndPassword = signInWithEmailAndPassword;
-      window.firebaseCreateUserWithEmailAndPassword =
-        createUserWithEmailAndPassword;
-      window.firebaseSendPasswordResetEmail = sendPasswordResetEmail;
-    </script>
     <script src="js/auth.js"></script>
   </body>
 </html>

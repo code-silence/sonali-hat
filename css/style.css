@@ -935,3 +935,115 @@ th {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================
+   Profile Slide Drawer Styles
+========================================= */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+.drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.profile-drawer {
+  position: fixed;
+  top: 0;
+  right: -400px; /* ডিফল্টভাবে স্ক্রিনের বাইরে থাকবে */
+  width: 100%;
+  max-width: 320px;
+  height: 100%;
+  background: #ffffff;
+  z-index: 10001;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+  transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* বাউন্সি স্লাইড ইফেক্ট */
+  display: flex;
+  flex-direction: column;
+}
+.profile-drawer.open {
+  right: 0; /* ক্লাসে অ্যাড হলে স্ক্রিনে চলে আসবে */
+}
+
+.drawer-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #1b4332;
+  color: white;
+}
+.close-drawer-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.close-drawer-btn:hover {
+  color: #ffb703;
+  transform: rotate(90deg);
+}
+
+.drawer-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+.drawer-avatar-section {
+  text-align: center;
+  margin-bottom: 25px;
+  border-bottom: 1px dashed #e2e8f0;
+  padding-bottom: 20px;
+}
+.drawer-avatar-section img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2d6a4f;
+  margin-bottom: 10px;
+}
+.drawer-role {
+  background: #e8f5e9;
+  color: #2d6a4f;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.drawer-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+.info-item i {
+  color: #2d6a4f;
+  width: 20px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+.info-item.bkash-info i {
+  color: #e2136e;
+}
+.info-item.nagad-info i {
+  color: #f26522;
+}
